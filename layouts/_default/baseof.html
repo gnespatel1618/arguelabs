@@ -13,6 +13,8 @@
   {{ with .Description | default site.Params.description }}<meta property="og:description" content="{{ . }}">{{ end }}
   {{ $cover := "" }}{{ with .Params.cover }}{{ with $.Resources.GetMatch . }}{{ $cover = .Permalink }}{{ end }}{{ end }}
   {{ with $cover }}<meta property="og:image" content="{{ . }}"><meta name="twitter:image" content="{{ . }}">{{ end }}
+  <meta name="twitter:site" content="@{{ site.Params.x }}"><meta name="twitter:creator" content="@{{ site.Params.x }}">
+  <meta name="author" content="{{ site.Params.author }}">
   <meta name="twitter:card" content="{{ if $cover }}summary_large_image{{ else }}summary{{ end }}">
   {{ with site.GetPage "/blog" }}{{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">{{ end }}{{ end }}
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>a</text></svg>">
@@ -48,6 +50,7 @@
     hr { border:0; border-top:1px solid var(--line); margin:40px 0 20px; }
     small { color:var(--muted); font-size:14px; display:block; line-height:1.6; }
     blockquote { margin:0; padding-left:16px; border-left:3px solid var(--line); color:var(--muted); }
+    footer a { color:var(--muted); }
     footer { border-top:1px solid var(--line); padding:24px 0 40px; color:var(--muted); font-size:15px; }
     @media (max-width:520px) { .posts li { flex-direction:column; gap:2px; } }
   </style>
@@ -59,7 +62,7 @@
       <nav><a href="/blog/">Blog</a><a href="/blog/index.xml">RSS</a></nav>
     </header>
     <main>{{ block "main" . }}{{ end }}</main>
-    <footer>© {{ now.Year }} {{ site.Params.author }}</footer>
+    <footer>© {{ now.Year }} <a href="https://x.com/{{ site.Params.x }}">{{ site.Params.author }}</a></footer>
   </div>
 </body>
 </html>

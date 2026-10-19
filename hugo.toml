@@ -5,8 +5,9 @@ enableRobotsTXT = true
 disableKinds = ["taxonomy", "term"]
 
 [params]
-  author = "Ganesh"
-  description = "Notes and essays by Ganesh."
+  author = "@Liyansh404"
+  x = "Liyansh404"
+  description = "Notes and essays by @Liyansh404."
 
 [markup.goldmark.renderer]
   unsafe = true
