@@ -11,7 +11,9 @@
   <meta property="og:url" content="{{ .Permalink }}">
   <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
   {{ with .Description | default site.Params.description }}<meta property="og:description" content="{{ . }}">{{ end }}
-  <meta name="twitter:card" content="summary">
+  {{ $cover := "" }}{{ with .Params.cover }}{{ with $.Resources.GetMatch . }}{{ $cover = .Permalink }}{{ end }}{{ end }}
+  {{ with $cover }}<meta property="og:image" content="{{ . }}"><meta name="twitter:image" content="{{ . }}">{{ end }}
+  <meta name="twitter:card" content="{{ if $cover }}summary_large_image{{ else }}summary{{ end }}">
   {{ with site.GetPage "/blog" }}{{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">{{ end }}{{ end }}
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>a</text></svg>">
   <style>
@@ -38,6 +40,13 @@
     code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:0.9em; }
     :not(pre) > code { background:var(--code); padding:2px 5px; border-radius:4px; }
     img { max-width:100%; height:auto; }
+    img.cover { display:block; border-radius:8px; margin:0 0 28px; }
+    figure { margin:28px 0; }
+    figure img { display:block; border-radius:8px; }
+    figcaption { color:var(--muted); font-size:15px; margin-top:8px; }
+    figcaption p { margin:0; }
+    hr { border:0; border-top:1px solid var(--line); margin:40px 0 20px; }
+    small { color:var(--muted); font-size:14px; display:block; line-height:1.6; }
     blockquote { margin:0; padding-left:16px; border-left:3px solid var(--line); color:var(--muted); }
     footer { border-top:1px solid var(--line); padding:24px 0 40px; color:var(--muted); font-size:15px; }
     @media (max-width:520px) { .posts li { flex-direction:column; gap:2px; } }

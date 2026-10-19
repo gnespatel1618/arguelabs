@@ -1,7 +1,11 @@
 {{ define "main" }}
 <article>
   <h1>{{ .Title }}</h1>
-  <div class="meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time> · {{ .ReadingTime }} min read</div>
+  <div class="meta">
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time> · {{ .ReadingTime }} min read
+    {{ with .Parent }}{{ if and (ne .RelPermalink "/blog/") (ne .RelPermalink "/") }} · <a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}{{ end }}
+  </div>
+  {{ with .Params.cover }}{{ with $.Resources.GetMatch . }}<img class="cover" src="{{ .RelPermalink }}" alt="" width="{{ .Width }}" height="{{ .Height }}">{{ end }}{{ end }}
   {{ .Content }}
 </article>
 <p style="margin-top:48px"><a href="/blog/">← All posts</a></p>

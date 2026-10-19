@@ -8,9 +8,6 @@ disableKinds = ["taxonomy", "term"]
   author = "Ganesh"
   description = "Notes and essays by Ganesh."
 
-[permalinks]
-  blog = "/blog/:slug/"
-
 [markup.goldmark.renderer]
   unsafe = true
 
