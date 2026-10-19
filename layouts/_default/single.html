@@ -1,0 +1,8 @@
+{{ define "main" }}
+<article>
+  <h1>{{ .Title }}</h1>
+  <div class="meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time> · {{ .ReadingTime }} min read</div>
+  {{ .Content }}
+</article>
+<p style="margin-top:48px"><a href="/blog/">← All posts</a></p>
+{{ end }}

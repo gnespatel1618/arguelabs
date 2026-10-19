@@ -1,0 +1,10 @@
+{{ define "main" }}
+{{ .Content }}
+<h2>Recent posts</h2>
+<ul class="posts">
+{{ range first 10 (where site.RegularPages "Section" "blog") }}
+  <li><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+{{ end }}
+</ul>
+<p><a href="/blog/">All posts →</a></p>
+{{ end }}
