@@ -1,0 +1,9 @@
+{{- $src := .Get "src" -}}{{- $cap := .Get "caption" | default "" -}}{{- $alt := .Get "alt" | default $cap -}}
+{{- $label := "FIGURE" -}}{{- with findRE `^Figure \d+` $cap 1 }}{{ $label = upper (index . 0) }}{{ end -}}
+{{- $rest := replaceRE `^Figure \d+\.\s*` "" $cap -}}
+{{- $res := .Page.Resources.GetMatch $src -}}
+<figure class="win fig">
+  {{ partial "winbar.html" (dict "label" $label "right" "CLICK TO ENLARGE") }}
+  <a href="{{ $src }}" target="_blank" rel="noopener"><img src="{{ $src }}" alt="{{ $alt }}" loading="lazy"{{ with $res }} width="{{ .Width }}" height="{{ .Height }}"{{ end }}></a>
+  {{- with $rest }}<figcaption>{{ . | markdownify }}</figcaption>{{ end }}
+</figure>

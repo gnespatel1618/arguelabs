@@ -1,9 +1,18 @@
 {{ define "main" }}
-<h1>{{ .Title }}</h1>
-{{ .Content }}
-<ul class="posts">
-{{ range .RegularPagesRecursive.ByDate.Reverse }}
-  <li><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-{{ end }}
-</ul>
+<section class="list-hero">
+  <div class="dither list-dither" data-dither="sky" aria-hidden="true"></div>
+  <div class="wrap list-hero-inner">
+    <p class="eyebrow"><span class="sq pink" aria-hidden="true"></span>{{ if eq .RelPermalink "/blog/" }}ALL WRITING{{ else }}SECTION{{ end }}</p>
+    <h1 class="page-title">{{ if eq .RelPermalink "/blog/" }}The <em>blog</em>{{ else }}<em>{{ .Title }}</em>{{ end }}</h1>
+    {{ with .Description }}<p class="page-dek">{{ . }}</p>{{ else }}{{ with .Content }}<div class="page-dek">{{ . }}</div>{{ end }}{{ end }}
+    {{ if eq .RelPermalink "/blog/" }}
+    <ul class="band-tags left" aria-label="Sections">{{ range .Sections }}<li><a href="{{ .RelPermalink }}"><span class="sq" aria-hidden="true"></span>{{ upper .Title }}</a></li>{{ end }}</ul>
+    {{ end }}
+  </div>
+</section>
+<section class="wrap section">
+  <div class="grid">
+    {{ range .RegularPagesRecursive.ByDate.Reverse }}{{ partial "card.html" (dict "page" . "featured" false) }}{{ else }}<p class="empty">Nothing here yet.</p>{{ end }}
+  </div>
+</section>
 {{ end }}

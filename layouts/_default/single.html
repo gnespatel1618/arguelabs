@@ -1,12 +1,27 @@
 {{ define "main" }}
-<article>
-  <h1>{{ .Title }}</h1>
-  <div class="meta">
-    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time> · {{ .ReadingTime }} min read
-    {{ with .Parent }}{{ if and (ne .RelPermalink "/blog/") (ne .RelPermalink "/") }} · <a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}{{ end }}
+{{ $cover := false }}{{ with .Params.cover }}{{ with $.Resources.GetMatch . }}{{ $cover = . }}{{ end }}{{ end }}
+<article class="post">
+  <header class="post-head wrap-narrow">
+    <div class="kicker">
+      {{ with .Parent }}{{ if and (ne .RelPermalink "/blog/") (ne .RelPermalink "/") }}<a class="chip" href="{{ .RelPermalink }}"><span class="sq pink" aria-hidden="true"></span>{{ upper .Title }}</a>{{ end }}{{ end }}
+      <span class="meta-mono"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ upper (.Date.Format "02 Jan 2006") }}</time> · {{ .ReadingTime }} MIN READ</span>
+    </div>
+    <h1 class="post-title">{{ partial "title.html" .Title }}</h1>
+    {{ with .Description }}<p class="post-dek">{{ . }}</p>{{ end }}
+    <p class="byline">By <a href="https://x.com/{{ site.Params.x }}">{{ site.Params.author }}</a></p>
+  </header>
+  {{ with $cover }}
+  <div class="post-cover wrap-wide">
+    <figure class="win">
+      {{ partial "winbar.html" (dict "label" "COVER" "color" "pink" "right" "ARGUELABS.IN") }}
+      {{ $img := .Resize "1600x webp q85" }}<img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="">
+    </figure>
   </div>
-  {{ with .Params.cover }}{{ with $.Resources.GetMatch . }}<img class="cover" src="{{ .RelPermalink }}" alt="" width="{{ .Width }}" height="{{ .Height }}">{{ end }}{{ end }}
-  {{ .Content }}
+  {{ end }}
+  <div class="prose wrap-narrow">{{ .Content }}</div>
+  <footer class="post-foot wrap-narrow">
+    <a class="btn btn-pink" href="https://x.com/intent/post?text={{ .Title | urlquery }}&url={{ .Permalink | urlquery }}&via={{ site.Params.x }}" rel="noopener">SHARE ON X</a>
+    <a class="btn" href="/blog/">← ALL POSTS</a>
+  </footer>
 </article>
-<p style="margin-top:48px"><a href="/blog/">← All posts</a></p>
 {{ end }}

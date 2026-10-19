@@ -1,10 +1,44 @@
 {{ define "main" }}
-{{ .Content }}
-<h2>Recent posts</h2>
-<ul class="posts">
-{{ range first 10 (where site.RegularPages "Section" "blog") }}
-  <li><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-{{ end }}
-</ul>
-<p><a href="/blog/">All posts →</a></p>
+{{ $posts := (where site.RegularPages "Section" "blog").ByDate.Reverse }}
+{{ $latest := index $posts 0 }}
+<section class="hero">
+  <div class="dither hero-dither" data-dither="sky" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="sq pink" aria-hidden="true"></span>ESSAYS BY @{{ upper site.Params.x }}</p>
+      <h1 class="hero-title">Notes on<br><em class="type" data-words="markets,businesses,capital,incentives">markets</em><span class="caret" aria-hidden="true"></span></h1>
+      <div class="hero-lede">{{ .Content }}</div>
+      <div class="cta">
+        <a class="btn btn-pink" href="/blog/">READ THE BLOG</a>
+        <a class="btn" href="https://x.com/{{ site.Params.x }}">FOLLOW ON X</a>
+      </div>
+    </div>
+    {{ with $latest }}
+    {{ $cover := false }}{{ with .Params.cover }}{{ with $latest.Resources.GetMatch . }}{{ $cover = . }}{{ end }}{{ end }}
+    <a class="hero-window win" href="{{ .RelPermalink }}">
+      {{ partial "winbar.html" (dict "label" "LATEST ESSAY" "color" "green") }}
+      {{ with $cover }}{{ $img := .Resize "1200x webp q82" }}<img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="">{{ end }}
+      <span class="hero-window-cap">{{ .Title }}</span>
+      <span class="play" aria-hidden="true">READ →</span>
+    </a>
+    {{ end }}
+  </div>
+</section>
+
+<section class="band">
+  <p>Browse by <em>section</em></p>
+  <ul class="band-tags" aria-label="Topics">
+    {{ range where (site.GetPage "/blog").Sections "Kind" "section" }}<li><a href="{{ .RelPermalink }}"><span class="sq" aria-hidden="true"></span>{{ upper .Title }}</a></li>{{ end }}
+  </ul>
+</section>
+
+<section class="wrap section">
+  <div class="section-head">
+    <h2>Latest <em>writing</em></h2>
+    <a class="link-mono" href="/blog/">ALL POSTS →</a>
+  </div>
+  <div class="grid">
+    {{ range $i, $p := first 6 $posts }}{{ partial "card.html" (dict "page" $p "featured" (eq $i 0)) }}{{ end }}
+  </div>
+</section>
 {{ end }}

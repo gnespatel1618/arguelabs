@@ -1,0 +1,2 @@
+{{- $t := . -}}
+{{- if strings.Contains $t ": " -}}{{- $p := split $t ": " -}}{{ index $p 0 }}: <em>{{ delimit (after 1 $p) ": " }}</em>{{- else -}}{{ $t }}{{- end -}}

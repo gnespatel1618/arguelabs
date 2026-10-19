@@ -1,0 +1,3 @@
+{{- $label := "ESSAY" -}}
+{{- with .Parent }}{{ if and (ne .RelPermalink "/blog/") (ne .RelPermalink "/") }}{{ $label = upper .Title }}{{ end }}{{ end -}}
+{{- $label -}}

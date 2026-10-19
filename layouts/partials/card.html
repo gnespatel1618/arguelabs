@@ -1,0 +1,13 @@
+{{ $p := .page }}
+{{ $cover := false }}{{ with $p.Params.cover }}{{ with $p.Resources.GetMatch . }}{{ $cover = . }}{{ end }}{{ end }}
+<article class="card win{{ if .featured }} card-featured{{ end }}">
+  {{ partial "winbar.html" (dict "label" (partial "section-label.html" $p) "right" (upper ($p.Date.Format "02 Jan 2006")) "color" "pink") }}
+  <a class="card-link" href="{{ $p.RelPermalink }}">
+    {{ with $cover }}{{ $img := .Resize "1200x webp q82" }}<div class="card-media"><img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="" loading="{{ if $.featured }}eager{{ else }}lazy{{ end }}"></div>{{ end }}
+    <div class="card-body">
+      <h3 class="card-title">{{ partial "title.html" $p.Title }}</h3>
+      {{ with $p.Description }}<p class="card-desc">{{ . }}</p>{{ end }}
+      <span class="card-meta">{{ $p.ReadingTime }} MIN READ <span class="arrow" aria-hidden="true">→</span></span>
+    </div>
+  </a>
+</article>

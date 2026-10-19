@@ -3,66 +3,54 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {{ $title := cond .IsHome site.Title (printf "%s · %s" .Title site.Title) }}
+  {{ $title := cond .IsHome (printf "%s · essays by %s" site.Title site.Params.author) (printf "%s · %s" .Title site.Title) }}
   <title>{{ $title }}</title>
-  {{ with .Description | default site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
+  {{ $desc := .Description | default site.Params.description }}
+  <meta name="description" content="{{ $desc }}">
+  <meta name="author" content="{{ site.Params.author }}">
   <link rel="canonical" href="{{ .Permalink }}">
-  <meta property="og:title" content="{{ $title }}">
+  <meta property="og:site_name" content="{{ site.Title }}">
+  <meta property="og:title" content="{{ .Title | default site.Title }}">
+  <meta property="og:description" content="{{ $desc }}">
   <meta property="og:url" content="{{ .Permalink }}">
   <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
-  {{ with .Description | default site.Params.description }}<meta property="og:description" content="{{ . }}">{{ end }}
   {{ $cover := "" }}{{ with .Params.cover }}{{ with $.Resources.GetMatch . }}{{ $cover = .Permalink }}{{ end }}{{ end }}
   {{ with $cover }}<meta property="og:image" content="{{ . }}"><meta name="twitter:image" content="{{ . }}">{{ end }}
-  <meta name="twitter:site" content="@{{ site.Params.x }}"><meta name="twitter:creator" content="@{{ site.Params.x }}">
-  <meta name="author" content="{{ site.Params.author }}">
   <meta name="twitter:card" content="{{ if $cover }}summary_large_image{{ else }}summary{{ end }}">
+  <meta name="twitter:site" content="@{{ site.Params.x }}"><meta name="twitter:creator" content="@{{ site.Params.x }}">
+  <meta name="theme-color" content="#f1ede6">
   {{ with site.GetPage "/blog" }}{{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">{{ end }}{{ end }}
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>a</text></svg>">
-  <style>
-    :root { --bg:#fdfdfc; --fg:#1d1d1f; --muted:#6b6b70; --line:#e6e6e3; --accent:#2f5bd3; --code:#f4f4f1; }
-    @media (prefers-color-scheme: dark) { :root { --bg:#141416; --fg:#e8e8ea; --muted:#9a9aa2; --line:#2a2a2e; --accent:#8aa8ff; --code:#1f1f23; } }
-    * { box-sizing: border-box; }
-    body { margin:0; background:var(--bg); color:var(--fg); font:18px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Georgia, serif; }
-    .wrap { max-width: 680px; margin: 0 auto; padding: 0 20px; }
-    header { padding: 28px 0; display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--line); }
-    header a { color:var(--fg); text-decoration:none; }
-    .brand { font-weight:700; letter-spacing:-0.01em; }
-    nav a { margin-left:18px; color:var(--muted); font-size:16px; }
-    main { padding: 36px 0 60px; }
-    h1 { font-size: 2rem; line-height:1.25; letter-spacing:-0.02em; margin:0 0 8px; }
-    h2 { font-size:1.35rem; margin-top:2em; }
-    a { color:var(--accent); }
-    .meta { color:var(--muted); font-size:15px; margin-bottom:28px; }
-    .posts { list-style:none; padding:0; margin:0; }
-    .posts li { padding:14px 0; border-bottom:1px solid var(--line); display:flex; gap:16px; }
-    .posts time { color:var(--muted); font-size:15px; min-width:96px; font-variant-numeric: tabular-nums; }
-    .posts a { color:var(--fg); text-decoration:none; }
-    .posts a:hover { color:var(--accent); }
-    pre { background:var(--code) !important; padding:14px 16px; border-radius:8px; overflow-x:auto; font-size:15px; line-height:1.5; }
-    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:0.9em; }
-    :not(pre) > code { background:var(--code); padding:2px 5px; border-radius:4px; }
-    img { max-width:100%; height:auto; }
-    img.cover { display:block; border-radius:8px; margin:0 0 28px; }
-    figure { margin:28px 0; }
-    figure img { display:block; border-radius:8px; }
-    figcaption { color:var(--muted); font-size:15px; margin-top:8px; }
-    figcaption p { margin:0; }
-    hr { border:0; border-top:1px solid var(--line); margin:40px 0 20px; }
-    small { color:var(--muted); font-size:14px; display:block; line-height:1.6; }
-    blockquote { margin:0; padding-left:16px; border-left:3px solid var(--line); color:var(--muted); }
-    footer a { color:var(--muted); }
-    footer { border-top:1px solid var(--line); padding:24px 0 40px; color:var(--muted); font-size:15px; }
-    @media (max-width:520px) { .posts li { flex-direction:column; gap:2px; } }
-  </style>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231b1a17'/%3E%3Crect x='20' y='4' width='8' height='8' fill='%23ef5f86'/%3E%3Ctext x='5' y='27' font-family='Georgia,serif' font-style='italic' font-size='24' fill='%23f1ede6'%3Ea%3C/text%3E%3C/svg%3E">
+  <link rel="preload" href="/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  {{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 </head>
-<body>
-  <div class="wrap">
-    <header>
-      <a class="brand" href="/">{{ site.Title }}</a>
-      <nav><a href="/blog/">Blog</a><a href="/blog/index.xml">RSS</a></nav>
-    </header>
-    <main>{{ block "main" . }}{{ end }}</main>
-    <footer>© {{ now.Year }} <a href="https://x.com/{{ site.Params.x }}">{{ site.Params.author }}</a></footer>
-  </div>
+<body class="{{ if .IsHome }}is-home{{ else if .IsPage }}is-post{{ else }}is-list{{ end }}">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <nav class="nav" aria-label="Main">
+      <a class="nav-brand" href="/" aria-label="{{ site.Title }} home"><span class="mark" aria-hidden="true">a</span>ARGUELABS</a>
+      <a href="/blog/"{{ if eq .Section "blog" }} aria-current="page"{{ end }}><span class="sq" aria-hidden="true"></span>BLOG</a>
+      <a class="hide-sm" href="/blog/finance/"><span class="sq" aria-hidden="true"></span>FINANCE</a>
+      <a class="hide-sm" href="/blog/index.xml">RSS</a>
+    </nav>
+    <a class="btn btn-pink" href="https://x.com/{{ site.Params.x }}" rel="me noopener"><span class="hide-sm">FOLLOW </span>@{{ upper site.Params.x }}</a>
+  </header>
+  <main id="main">{{ block "main" . }}{{ end }}</main>
+  <footer class="site-foot">
+    <div class="dither foot-dither" data-dither="dusk" aria-hidden="true"></div>
+    <div class="foot-inner">
+      <p class="foot-big">Thanks for <em>reading.</em></p>
+      <p class="foot-sub">New essays land on X first. Follow along, or grab the RSS feed.</p>
+      <div class="foot-links">
+        <a class="btn btn-pink" href="https://x.com/{{ site.Params.x }}">@{{ upper site.Params.x }} ON X</a>
+        <a class="btn" href="/blog/index.xml">RSS FEED</a>
+      </div>
+      <p class="foot-legal">© {{ now.Year }} {{ site.Params.author }} · arguelabs.in · Nothing here is investment advice.</p>
+    </div>
+  </footer>
+  {{ $js := resources.Get "js/main.js" | minify | fingerprint }}
+  <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
 </body>
 </html>
