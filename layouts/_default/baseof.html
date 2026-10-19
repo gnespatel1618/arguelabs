@@ -51,6 +51,7 @@
     </div>
   </footer>
   {{ $js := resources.Get "js/main.js" | minify | fingerprint }}
+  {{ partial "analytics.html" . }}
   <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
 </body>
 </html>

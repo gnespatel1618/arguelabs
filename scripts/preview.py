@@ -10,7 +10,7 @@ root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 out = os.path.join(root, "preview")
 hugo = sys.argv[1] if len(sys.argv) > 1 else "hugo"
 shutil.rmtree(out, ignore_errors=True)
-env = dict(os.environ, HUGO_RELATIVEURLS="true")
+env = dict(os.environ, HUGO_RELATIVEURLS="true", HUGO_ENVIRONMENT="preview")
 subprocess.run([hugo, "--gc", "--buildDrafts", "--destination", out], cwd=root, check=True, env=env)
 
 for dirpath, _, files in os.walk(out):
