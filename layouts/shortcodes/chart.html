@@ -1,0 +1,7 @@
+{{- $src := .Get "src" -}}{{- $res := .Page.Resources.GetMatch $src -}}
+{{- if not $res }}{{ errorf "chart shortcode: %q not found in %s" $src .Page.File.Path }}{{ end -}}
+<figure class="win fig fig-chart">
+  {{ partial "winbar.html" (dict "label" (upper (.Get "label" | default "Figure")) "right" "ARGUELABS.IN") }}
+  <div class="chart-scroll">{{ $res.Content | safeHTML }}</div>
+  {{- with .Get "source" }}<figcaption><span class="src-label">Source</span>{{ . | markdownify }}</figcaption>{{ end }}
+</figure>
