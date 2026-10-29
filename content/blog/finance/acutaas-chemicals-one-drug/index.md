@@ -3,6 +3,67 @@ title: "Acutaas Chemicals: a great business riding one drug"
 date: 2026-10-22T08:00:00+05:30
 description: "One cancer drug turned a Surat chemicals maker into a ₹26,000 Cr company. The core keeps beating guidance, the new ventures keep slipping, and the price already assumes a near-perfect decade."
 cover: "acutaas-cover.jpg"
+lastmod: 2026-10-29T09:00:00+05:30
+---
+
+## Update, 29 Oct 2026: the Q2 FY27 results
+
+> **Updated 29 Oct 2026.** This section covers the September-quarter results. Everything below it is the original analysis from 22 Oct; where the valuation changed, the revised figures are here. **Disclosure:** shares of Acutaas Chemicals are held in my family portfolio.
+
+Acutaas reported on 27 October. The core business beat its own guidance again, which is exactly the pattern this piece describes. The stock rose 13% on the day, to a record.
+
+{{< chart src="u01-q2-what-changed.svg" label="Update" source="Acutaas Q2 FY27 results, investor presentation and call (27 Oct 2026); Screener.in price, 28 Oct 2026" >}}
+
+**What came in**
+
+- Revenue of ₹437 Cr, up 43% on last year and 32% on the June quarter. EBITDA of ₹176 Cr, a 40.3% margin against 31.1% a year ago. Net profit of ₹123 Cr, up 71%.
+- Advanced intermediates, which include CDMO, grew 53% to ₹402 Cr. Specialty chemicals fell 20% to ₹35 Cr, as legacy products were phased out and a US customer of Baba Fine Chemicals paused shipments after an ownership change.
+- The first commercial battery-chemical revenue arrived, for VC and FEC. The company did not give the amount. A third product is scaling up and a fourth is in pilot validation.
+
+**What management changed**
+
+- FY27 revenue growth guidance went up to about 30%, from 25%, with an EBITDA margin of 38–40%. Management said the margin guide is for FY27 only.
+- The ₹1,000 Cr CDMO revenue target is now expected in FY27, a year earlier than promised. The new aim is ₹2,000 Cr by FY30, with 8–10 pipeline products due to start selling over about 18 months.
+- FY27 capex is about ₹300 Cr, including about ₹100 Cr for electronic-grade chemicals and ₹45 Cr for the second phase of electrolyte additives.
+
+**What got worse**
+
+- Working capital rose to 115 days from 99 days in Q1, on higher debtor days.
+- The second Ankleshwar CDMO unit ran at only 30%, and management expects it to stay below 40% this year.
+- Disclosure is still thin. There is no CDMO split and no battery revenue figure, and management declined to discuss darolutamide demand.
+
+**The Nubeqa engine.** Orion reported on 28 October. Its Nubeqa royalties rose 87% to €223 million in the September quarter, and it had raised its 2026 outlook a week earlier. One new risk: water damage at Fermion's Hanko plant in July will cut Fermion's external sales in Q4, though Orion says supply of key products is not expected to be disrupted.
+
+{{< chart src="u02-quarterly.svg" label="Update" source="Screener.in consolidated quarterly results · Jun 2023–Sep 2026" >}}
+
+**Our revised numbers**
+
+{{< chart src="u03-estimates.svg" label="Update" source="Our estimates, before (22 Oct) and after (29 Oct) the Q2 results; PL Capital pre-results estimate" >}}
+
+|  | Before (22 Oct) | After (29 Oct) |
+| --- | --- | --- |
+| FY27E revenue growth and EBITDA margin | 27%, 35.5% | 30%, 39% |
+| FY27E EPS | ₹52 | ₹58.6 |
+| FY28E EPS | ₹64 | ₹68 |
+| Base value (FY28E EPS × 45x) | ₹2,880 | ₹3,060 |
+| DCF, base case | ₹815 | ₹840 |
+| Blended fair value (70% P/E, 30% DCF) | ₹2,260 (₹2,050–2,450) | ₹2,390 (₹2,170–2,600) |
+| Share price | ₹3,152 | ₹3,818 |
+| P/E on our FY28E EPS | 49x | 56x |
+| Reverse DCF: revenue growth the price needs | about 37% a year for ten years | about 40% a year for ten years |
+
+{{< chart src="u04-scenarios.svg" label="Update" source="Our revised scenarios · price from Screener.in, 28 Oct 2026" >}}
+
+{{< chart src="u05-value-vs-price.svg" label="Update" source="Our blended valuation before and after Q2; Screener.in prices" >}}
+
+**What it means.** The business did better than we assumed, so we raised our earnings estimates by 6–13%. The share price rose 21%. The gap between price and our fair value widened, from about 40% to about 60%. The DCF barely moves, because one stronger year counts for little against a decade of heavy capex and the patent expiries from 2029. Our view is unchanged: a very good business, priced as if the next ten years will look like this quarter.
+
+The margin-of-safety levels move up with the fair value: ₹2,150 (10%), ₹2,030 (15%) and ₹1,910 (20%).
+
+**What would still make us wrong.** The same three triggers apply, and the first is now in motion: management says some new CDMO contracts start contributing in H2 FY27. The other two are positive free cash flow in FY27, and battery revenue of ₹150 Cr or more at a 25%+ margin in FY28.
+
+**Next checks:** a battery revenue number in Q3; working capital back below 100 days; and Orion's Q4 report, for any effect of the Hanko incident on Fermion.
+
 ---
 
 ## The story in one minute
@@ -367,6 +428,8 @@ At ₹3,152 the stock trades at **61x our FY27 EPS and 49x our FY28 EPS**.
 **In short:** the profits are real and the accounts are clean. The risks are concentration, and a business that still eats more cash than it makes.
 
 ## Valuation
+
+> **Revised 29 Oct 2026:** after the Q2 results our blended fair value is ₹2,390 (range ₹2,170–2,600), against a price of ₹3,818. See the update at the top. The figures in this section are the original analysis from 22 Oct.
 
 **Verdict: OVERVALUED.** Our fair value is **₹2,050–2,450 (midpoint ₹2,260)**, against a price of ₹3,152. The stock is about 40% above our midpoint.
 

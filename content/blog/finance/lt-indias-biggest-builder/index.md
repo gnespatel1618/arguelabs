@@ -3,6 +3,7 @@ title: "L&T: India's biggest builder, explained"
 date: 2026-10-19T18:00:00+05:30
 description: "L&T is very good at winning work and much less good at turning it into rising margins. And the stock already prices in a smooth future."
 cover: "lt-cover.jpg"
+lastmod: 2026-10-29T09:00:00+05:30
 ---
 
 Imagine a company that has already been hired to build ₹7.8 lakh crore of projects. That is more work than its next six Indian rivals have combined. It builds metros, refineries, offshore platforms, power lines, nuclear parts and submarines. Yet its stock has returned only about 6% a year for three years.
@@ -10,6 +11,30 @@ Imagine a company that has already been hired to build ₹7.8 lakh crore of proj
 **The short answer:** L&T is very good at winning work. It is much less good at turning that work into rising profit margins. And the stock already prices in a smooth future.
 
 {{< chart src="01-at-a-glance.svg" label="At a glance" source="Screener.in, L&T results releases · as of 19 Oct 2026" >}}
+
+## Update, 29 Oct 2026: the Q2 FY27 results
+
+> **Updated 29 Oct 2026.** L&T reported on 27 October. This section scores the results against the checklist at the end of this piece. The rest of the post is the original analysis from 19 Oct.
+
+The headline was strong: record orders of ₹1.48 lakh Cr (up 28%), revenue of ₹78,750 Cr (up 16%) and net profit of ₹5,202 Cr (up 33%). The order book reached ₹8.5 lakh Cr. The stock rose about 6% the next day, to around ₹3,820.
+
+Under the headline, the quarter repeated the pattern this post describes: L&T wins more work, but it doesn't earn more on it.
+
+{{< chart src="l02-growth-gap.svg" label="Update" source="L&T Q2 FY27 results (27 Oct 2026), consolidated" >}}
+
+{{< chart src="l01-q2-checklist.svg" label="Update" source="L&T Q2 FY27 results and earnings call (27 Oct 2026); checklist from this post" >}}
+
+**What it means.**
+
+- **Winning work: better than ever.** Order inflow, the order book and working capital all beat expectations. Cash released from projects is now earning treasury income.
+- **Earning on the work: no better.** The projects and manufacturing margin was 7.0%, against the 7.8% management still targets for the year. The infrastructure margin improved from Q1's 5.1% to 5.7%, but is still below last year's 6.2%. Getting to 7.8% for the year now needs a sharp H2.
+- **Profit quality: the same worry.** EBITDA grew 1% on 16% more revenue; treasury income did the rest. That income lasts only while working capital stays this low, and our risk list already flags a reversal.
+
+Our view is unchanged: a great franchise, priced for a smoother year than the one it is having. At about ₹3,820 the stock trades even further ahead of the margin story.
+
+**Next checks:** the H2 margin against the 7.8% target; whether working capital stays below 10%; and Middle East logistics costs on solar projects.
+
+---
 
 ## The industry in two minutes
 
@@ -205,7 +230,7 @@ At ₹3,653 the question is not "is L&T a great company?" It is "will the next 1
 
 ## What to track
 
-**Q2 FY27 results on 27 Oct 2026:**
+**Q2 FY27 results on 27 Oct 2026** (scored in the update at the top):
 
 1. **Revenue guidance.** Is 10–12% kept, cut, or kept with a warning?
 2. **Core margin.** Below 7.5% is a warning sign; 7.8% or above would mean Q1's dip was one-off provisions.
