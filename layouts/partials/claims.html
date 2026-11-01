@@ -1,0 +1,46 @@
+{{- /* Optional claims layer. Front matter:
+  claims:
+    - figure: "₹3.08 lakh cr"          # the one number that carries the claim
+      figure_note: "sold by FPIs in 2026"
+      title: "Foreigners are selling and Indian funds are buying."
+      text: "Two or three sentences (markdown)."
+      evidence: ["a01-fpi-monthly.svg"] # charts/images in this post's folder
+      sources: ["NSDL via PTI"]          # markdown allowed
+      section: "the-flow-picture"        # id of the h2 in the full analysis
+*/ -}}
+{{- $p := .page -}}{{- $n := len .claims -}}
+<section class="claims wrap" id="claims" aria-label="Claims" data-claims="{{ $n }}">
+  <div class="claims-head g3"><span class="c1">The number</span><span>The claim</span><span class="c3 read" data-read-count>{{ $n }} claims</span></div>
+  {{- range $i, $c := .claims }}
+  {{- $no := printf "%02d" (add $i 1) -}}
+  <article class="claim g3" id="claim-{{ add $i 1 }}" data-claim="{{ add $i 1 }}">
+    <div>
+      <p class="claim-no">{{ $no }}<span class="sq" aria-hidden="true"></span></p>
+      {{ with $c.figure }}<p class="claim-fig">{{ replaceRE ` ([^ ]+)$` " $1" . }}</p>{{ end }}
+      {{ with $c.figure_note }}<p class="claim-cap">{{ . | markdownify }}</p>{{ end }}
+    </div>
+    <div>
+      <h2>{{ $c.title | markdownify }}</h2>
+      {{ with $c.text }}<div class="claim-text">{{ . | $p.RenderString (dict "display" "block") }}</div>{{ end }}
+      {{ $ev := $c.evidence | default slice }}
+      {{ with $ev }}
+      {{ $charts := 0 }}{{ $imgs := 0 }}{{ range . }}{{ if strings.HasSuffix . ".svg" }}{{ $charts = add $charts 1 }}{{ else }}{{ $imgs = add $imgs 1 }}{{ end }}{{ end }}
+      <details data-claim-ev="{{ add $i 1 }}">
+        <summary><span class="closed">Evidence ↓ {{ with $charts }}{{ . }} chart{{ if gt . 1 }}s{{ end }}{{ end }}{{ if and $charts $imgs }}, {{ end }}{{ with $imgs }}{{ . }} figure{{ if gt . 1 }}s{{ end }}{{ end }}{{ with $c.sources }}, {{ len . }} source{{ if gt (len .) 1 }}s{{ end }}{{ end }}</span><span class="open">Hide evidence ↑</span></summary>
+        <div class="claim-ev">
+          {{ range . }}{{ $res := $p.Resources.GetMatch . }}{{ if not $res }}{{ errorf "claims: evidence %q not found in %s" . $p.File.Path }}{{ end }}
+            {{ if strings.HasSuffix . ".svg" }}<figure class="fig fig-chart"><div class="chart-box">{{ $res.Content | safeHTML }}</div><figcaption><button type="button" class="enl" data-enlarge>Enlarge</button></figcaption></figure>
+            {{ else }}<figure class="fig fig-img"><a href="{{ $res.RelPermalink }}" data-enlarge-img><img src="{{ $res.RelPermalink }}" width="{{ $res.Width }}" height="{{ $res.Height }}" alt="" loading="lazy"></a></figure>{{ end }}
+          {{ end }}
+        </div>
+      </details>
+      {{ end }}
+    </div>
+    <aside class="claim-notes" aria-label="Sources">
+      {{ with $c.sources }}<ol>{{ range . }}<li>{{ . | markdownify }}</li>{{ end }}</ol>{{ end }}
+      {{ with $c.section }}{{ $sid := . }}<a href="#{{ $sid }}">Full section →</a>{{ end }}
+    </aside>
+  </article>
+  {{- end }}
+  <div class="claims-end"><span class="lbl">That's the argument. The detail, the numbers and the risks:</span><a href="#full">Read the full analysis · {{ $p.ReadingTime }} min ↓</a></div>
+</section>

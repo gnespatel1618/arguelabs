@@ -1,0 +1,5 @@
+{{- $words := 0 -}}{{- $figs := 0 -}}
+{{- range .claims -}}{{- $words = add $words (countwords (printf "%s %s" (.title | default "") (.text | default ""))) -}}{{- $figs = add $figs (len (.evidence | default slice)) -}}{{- end -}}
+{{- $min := math.Max 1 (math.Round (add (div (float $words) 213.0) (mul (float $figs) 0.4))) -}}
+{{- len .claims }} claims, about {{ int $min }} min; the full analysis is {{ .page.ReadingTime }}.
+{{- /**/ -}}

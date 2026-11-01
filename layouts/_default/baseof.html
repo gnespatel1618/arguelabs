@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {{ $title := cond .IsHome (printf "%s · essays by %s" site.Title site.Params.author) (printf "%s · %s" .Title site.Title) }}
+  {{ $title := cond .IsHome (printf "%s · notes by %s" site.Title site.Params.author) (printf "%s · %s" .Title site.Title) }}
   <title>{{ $title }}</title>
   {{ $desc := .Description | default site.Params.description }}
   <meta name="description" content="{{ $desc }}">
@@ -18,37 +18,32 @@
   {{ with $cover }}<meta property="og:image" content="{{ . }}"><meta name="twitter:image" content="{{ . }}">{{ end }}
   <meta name="twitter:card" content="{{ if $cover }}summary_large_image{{ else }}summary{{ end }}">
   <meta name="twitter:site" content="@{{ site.Params.x }}"><meta name="twitter:creator" content="@{{ site.Params.x }}">
-  <meta name="theme-color" content="#f1ede6">
+  <meta name="theme-color" content="#fcfcfa">
   {{ with site.GetPage "/blog" }}{{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">{{ end }}{{ end }}
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231b1a17'/%3E%3Crect x='20' y='4' width='8' height='8' fill='%23ef5f86'/%3E%3Ctext x='5' y='27' font-family='Georgia,serif' font-style='italic' font-size='24' fill='%23f1ede6'%3Ea%3C/text%3E%3C/svg%3E">
-  <link rel="preload" href="/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23141414'/%3E%3Ctext x='6' y='24' font-family='Helvetica,Arial,sans-serif' font-weight='800' font-size='22' fill='%23fcfcfa'%3Ea%3C/text%3E%3Crect x='22' y='19' width='5' height='5' fill='%23ef5f86'/%3E%3C/svg%3E">
+  <link rel="preload" href="/fonts/atkinson-hyperlegible-next-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/atkinson-hyperlegible-next-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
   {{ $css := resources.Get "css/main.css" | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 </head>
 <body class="{{ if .IsHome }}is-home{{ else if .IsPage }}is-post{{ else }}is-list{{ end }}">
   <a class="skip" href="#main">Skip to content</a>
-  <header class="topbar">
-    <nav class="nav" aria-label="Main">
-      <a class="nav-brand" href="/" aria-label="{{ site.Title }} home"><span class="mark" aria-hidden="true">a</span>ARGUELABS</a>
-      <a href="/blog/"{{ if eq .Section "blog" }} aria-current="page"{{ end }}><span class="sq" aria-hidden="true"></span>BLOG</a>
-      <a class="hide-sm" href="/blog/finance/"><span class="sq" aria-hidden="true"></span>FINANCE</a>
-      <a class="hide-sm" href="/blog/essays/"><span class="sq" aria-hidden="true"></span>ESSAYS</a>
-      <a class="hide-sm" href="/blog/index.xml">RSS</a>
-    </nav>
-    <a class="btn btn-pink" href="https://x.com/{{ site.Params.x }}" rel="me noopener"><span class="hide-sm">FOLLOW </span>@{{ upper site.Params.x }}</a>
+  <header class="mast">
+    <div class="wrap">
+      <a class="brand" href="/">arguelabs<span class="dot">.</span></a>
+      <nav aria-label="Sections">
+        {{ $cur := .FirstSection.RelPermalink }}{{ if .IsPage }}{{ with .Parent }}{{ $cur = .RelPermalink }}{{ end }}{{ else if not .IsHome }}{{ $cur = .RelPermalink }}{{ end }}
+        {{ range where (site.GetPage "/blog").Sections "Kind" "section" }}<a href="{{ .RelPermalink }}"{{ if eq $cur .RelPermalink }} aria-current="page"{{ end }}>{{ .Title }}</a>{{ end }}
+        <a href="/blog/index.xml">RSS</a>
+      </nav>
+      <a class="x" href="https://x.com/{{ site.Params.x }}" rel="me noopener">@{{ site.Params.x }} on X</a>
+    </div>
   </header>
   <main id="main">{{ block "main" . }}{{ end }}</main>
   <footer class="site-foot">
-    <div class="dither foot-dither" data-dither="dusk" aria-hidden="true"></div>
-    <div class="foot-inner">
-      <p class="foot-big">Thanks for <em>reading.</em></p>
-      <p class="foot-sub">New essays land on X first. Follow along, or grab the RSS feed.</p>
-      <div class="foot-links">
-        <a class="btn btn-pink" href="https://x.com/{{ site.Params.x }}">@{{ upper site.Params.x }} ON X</a>
-        <a class="btn" href="/blog/index.xml">RSS FEED</a>
-      </div>
-      <p class="foot-legal">© {{ now.Year }} {{ site.Params.author }} · arguelabs.in · Nothing here is investment advice.</p>
+    <div class="wrap">
+      <p>New writing goes out on X first: <a href="https://x.com/{{ site.Params.x }}">@{{ site.Params.x }}</a> · <a href="/blog/index.xml">RSS</a></p>
+      <p>© {{ now.Year }} {{ site.Params.author }} · arguelabs.in · Nothing here is investment advice.</p>
     </div>
   </footer>
   {{ $js := resources.Get "js/main.js" | minify | fingerprint }}

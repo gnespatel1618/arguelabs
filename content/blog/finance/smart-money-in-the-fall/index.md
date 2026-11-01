@@ -3,6 +3,57 @@ title: "Smart money in the fall: what FIIs sold and Indian funds bought"
 date: 2026-10-26T08:00:00+05:30
 description: "Foreigners pulled a record ₹3.08 lakh crore out of Indian stocks in 2026. Indian funds took the shares. Who bought what, which results backed it, and where the signals agree."
 cover: "smart-money-cover.jpg"
+hide_sections: ["the-answer-in-one-minute"]
+claims:
+  - figure: "₹3.08 lakh cr"
+    figure_note: "sold by foreign investors (FPIs) in 2026 so far"
+    title: "Foreigners are selling and Indian funds are buying."
+    text: "FPIs sold ₹35,861 crore in September and ₹48,056 crore in October to date. Domestic institutions bought ₹64,759 crore in September alone. SIPs hit a record ₹32,490 crore a month."
+    evidence: ["s01-at-a-glance.svg", "a01-fpi-monthly.svg", "n01-september-flows.svg"]
+    sources: ["NSDL depositories data via PTI, Jan to 23 Oct 2026", "NSE provisional DII data", "AMFI, September 2026"]
+    section: "the-flow-picture"
+  - figure: "−2.4 pts"
+    figure_note: "FII stake cut in HDFC Bank; domestic institutions +1.7"
+    title: "The biggest trade is a handover in large caps."
+    text: "FIIs cut stakes and mutual funds took the shares. BSE, MCX and Swiggy saw the same pattern; so did Bharti Airtel, M&M, Muthoot Finance and Indus Towers. In ITC's ₹9,395 crore block deal, GQG sold and Fidelity plus four Indian fund houses bought."
+    evidence: ["n08-hdfc-ownership.svg", "n09-itc-block.svg"]
+    sources: ["Exchange shareholding filings via Kotak Neo and Screener.in; HDFC Bank Q2 FY27 results", "Exchange block-deal data via Univest, 8 Oct 2026"]
+    section: "q2-shareholding-who-handed-what-to-whom"
+  - figure: "4 listings"
+    figure_note: "Lenskart, Meesho, Groww and Pine Labs: both camps added"
+    title: "Where both FIIs and Indian institutions added, the list is mostly new-age platforms and special situations."
+    text: "Beyond the new listings: Thyrocare, Karnataka Bank and Apar Industries, and shares that changed hands from a promoter or private-equity seller, such as EPL, Torrent Pharma and Adani Enterprises."
+    evidence: ["a03-stake-scatter.svg"]
+    sources: ["Screener.in quarterly shareholding (exchange filings), Jun vs Sep 2026 quarter; 52 stocks named in fund and block-deal news, not a random sample"]
+    section: "q2-shareholding-who-handed-what-to-whom"
+  - figure: "+₹2,599 cr"
+    figure_note: "FPI buying in IT, 1–15 Oct"
+    title: "The one sector FPIs bought in October is IT."
+    text: "The buying was led by HCL Tech, Tech Mahindra and Infosys stakes. Mutual funds hold IT at a record-low 5.3% of their equity assets. That is the clearest disagreement between the two camps."
+    evidence: ["a02-fpi-sectors.svg", "n04-mf-it-weight.svg"]
+    sources: ["NSDL fortnightly sector-wise FPI reports, 15 Sep, 30 Sep and 15 Oct 2026", "5paisa on MF sector weights; NSDL; Prime Database"]
+    section: "where-fiis-are-selling-and-the-one-place-they-are-buying"
+  - figure: "~₹6,000 cr"
+    figure_note: "mutual-fund buying in Reliance in September"
+    title: "Mutual funds' biggest September buys were Reliance, BSE and NSE shares."
+    text: "Reliance ahead of the Jio Platforms IPO; BSE, over ₹5,500 crore, on its entry into the Nifty 50; NSE shares before its IPO; plus private banks and Swiggy. Their biggest sales were Wipro, L&T and TCS."
+    evidence: ["n05-mf-top-buys.svg"]
+    sources: ["Prime Database and Motilal Oswal Fund Folio via Business Standard, September 2026"]
+    section: "what-mutual-funds-bought-and-sold-in-september"
+  - figure: "+25.5%"
+    figure_note: "early Q2 profit growth across 337 companies"
+    title: "Results season backs some of this, not all."
+    text: "Metals and power drive much of that growth. Banks are growing profits while margins shrink, and pharma has disappointed."
+    evidence: ["n12-profit-concentration.svg", "n11-results-check.svg", "n13-bank-margins.svg"]
+    sources: ["Business Standard early Q2 results review (337 companies); Motilal Oswal", "Company Q2 FY27 results"]
+    section: "results-season-are-the-stocks-being-bought-delivering"
+  - figure: "5 names"
+    figure_note: "where institutional buying, a decent quarter and a sane valuation line up"
+    title: "Where several signals line up, the short list is HCL Tech, Karnataka Bank, ICICI Bank, Kotak Bank and ITC."
+    text: "HDFC Bank goes on a separate watch list: funds keep absorbing it at its cheapest valuation in years, but its quarter was weak. These are names to research further, not buy calls."
+    evidence: ["n14-conviction.svg"]
+    sources: ["Our four-signal check; prices and P/E from Screener.in, 26 Oct 2026"]
+    section: "the-conviction-list-where-the-signals-agree"
 ---
 
 ## The answer in one minute

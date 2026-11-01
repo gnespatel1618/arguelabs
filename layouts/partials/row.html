@@ -1,0 +1,7 @@
+{{- $p := .page -}}
+{{- $cover := false }}{{ with $p.Params.cover }}{{ with $p.Resources.GetMatch . }}{{ $cover = . }}{{ end }}{{ end -}}
+<a class="row g3" href="{{ $p.RelPermalink }}" data-path="{{ $p.RelPermalink }}">
+  <span>{{ with $cover }}{{ $img := .Resize "480x webp q78" }}<img class="thumb" src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="" loading="lazy">{{ end }}<span class="d">{{ $p.Date.Format "2 Jan 2006" }}{{ if gt ($p.Lastmod.Sub $p.Date).Hours 24.0 }}<br><span class="up">updated {{ $p.Lastmod.Format "2 Jan" }}</span>{{ end }}</span></span>
+  <span><span class="t">{{ $p.Title }}</span>{{ with $p.Description }}<span class="k">{{ . }}</span>{{ end }}</span>
+  <span class="x">{{ partial "section-name.html" $p }}<br>{{ with $p.Params.claims }}{{ len . }} claims · {{ end }}{{ $p.ReadingTime }} min</span>
+</a>

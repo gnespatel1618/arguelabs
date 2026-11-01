@@ -1,27 +1,29 @@
 {{ define "main" }}
 {{ $cover := false }}{{ with .Params.cover }}{{ with $.Resources.GetMatch . }}{{ $cover = . }}{{ end }}{{ end }}
-<article class="post">
-  <header class="post-head wrap-narrow">
-    <div class="kicker">
-      {{ with .Parent }}{{ if and (ne .RelPermalink "/blog/") (ne .RelPermalink "/") }}<a class="chip" href="{{ .RelPermalink }}"><span class="sq pink" aria-hidden="true"></span>{{ upper .Title }}</a>{{ end }}{{ end }}
-      <span class="meta-mono"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ upper (.Date.Format "02 Jan 2006") }}</time> · {{ .ReadingTime }} MIN READ</span>
+{{ $claims := .Params.claims }}
+<article class="post" data-path="{{ .RelPermalink }}" data-title="{{ .Title }}" data-minutes="{{ .ReadingTime }}">
+  <header class="post-head wrap">
+    <p class="kicker">{{ with .Parent }}{{ if and (ne .RelPermalink "/blog/") (ne .RelPermalink "/") }}<a href="{{ .RelPermalink }}">{{ .Title }}</a> — {{ end }}{{ end }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 Jan 2006" }}</time>{{ if and .Lastmod (gt (.Lastmod.Sub .Date).Hours 24.0) }} — updated <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2 Jan" }}</time>{{ end }} — {{ .ReadingTime }} min — by <a href="https://x.com/{{ site.Params.x }}">{{ site.Params.author }}</a></p>
+    <h1 class="post-title">{{ .Title }}</h1>
+    <div class="g3">
+      {{ with .Description }}<p class="dek span23">{{ . }}{{ with $claims }} {{ partial "claims-summary.html" (dict "claims" . "page" $) }}{{ end }}</p>{{ end }}
+      {{ with $cover }}{{ $img := .Resize "1720x webp q82" }}<figure class="cover span23"><img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="" fetchpriority="high"></figure>{{ end }}
     </div>
-    <h1 class="post-title">{{ partial "title.html" .Title }}</h1>
-    {{ with .Description }}<p class="post-dek">{{ . }}</p>{{ end }}
-    <p class="byline">By <a href="https://x.com/{{ site.Params.x }}">{{ site.Params.author }}</a></p>
   </header>
-  {{ with $cover }}
-  <div class="post-cover wrap-wide">
-    <figure class="win">
-      {{ partial "winbar.html" (dict "label" "COVER" "color" "pink" "right" "ARGUELABS.IN") }}
-      {{ $img := .Resize "1600x webp q85" }}<img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="">
-    </figure>
+
+  {{ with $claims }}{{ partial "claims.html" (dict "claims" . "page" $) }}{{ end }}
+
+  <div class="body wrap" id="full">
+    {{ partial "sections.html" . }}
   </div>
-  {{ end }}
-  <div class="prose wrap-narrow">{{ .Content }}</div>
-  <footer class="post-foot wrap-narrow">
-    <a class="btn btn-pink" href="https://x.com/intent/post?text={{ .Title | urlquery }}&url={{ .Permalink | urlquery }}&via={{ site.Params.x }}" rel="noopener">SHARE ON X</a>
-    <a class="btn" href="/blog/">← ALL POSTS</a>
+
+  <footer class="post-foot wrap">
+    <div class="row">
+      <a href="https://x.com/intent/post?text={{ .Title | urlquery }}&url={{ .Permalink | urlquery }}&via={{ site.Params.x }}" rel="noopener">Share on X</a>
+      <a href="https://x.com/{{ site.Params.x }}" rel="noopener">Follow @{{ site.Params.x }}</a>
+      <a href="/blog/">All writing</a>
+    </div>
+    {{ with .PrevInSection }}<a class="next" href="{{ .RelPermalink }}"><span class="lbl">Read next — {{ .ReadingTime }} min</span><span class="t">{{ .Title }}</span></a>{{ else }}{{ with .NextInSection }}<a class="next" href="{{ .RelPermalink }}"><span class="lbl">Read next — {{ .ReadingTime }} min</span><span class="t">{{ .Title }}</span></a>{{ end }}{{ end }}
   </footer>
 </article>
 {{ end }}

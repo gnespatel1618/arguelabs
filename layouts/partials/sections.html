@@ -1,0 +1,29 @@
+{{- /* Splits the post at each h2 and gives every section a margin label:
+       number, title, minutes. Sections listed in front matter `hide_sections`
+       (h2 ids) are left out, e.g. a summary the claims already cover. */ -}}
+{{- $hide := .Params.hide_sections | default slice -}}
+{{- $parts := split .Content "<h2 " -}}
+{{- $secs := slice -}}
+{{- range $i, $chunk := $parts -}}
+  {{- if eq $i 0 -}}
+    {{- if ne (trim $chunk " \n") "" -}}{{- $secs = $secs | append (dict "html" $chunk "intro" true "id" "" "title" "") -}}{{- end -}}
+  {{- else -}}
+    {{- $html := printf "<h2 %s" $chunk -}}
+    {{- $m := index (findRESubmatch `(?s)^<h2[^>]*?id="([^"]*)"[^>]*>(.*?)</h2>` $html 1) 0 -}}
+    {{- $id := index $m 1 -}}{{- $t := index $m 2 -}}
+    {{- if not (in $hide $id) -}}{{- $secs = $secs | append (dict "html" $html "intro" false "id" $id "title" $t) -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $total := 0 -}}{{- range $secs -}}{{- if not .intro -}}{{- $total = add $total 1 -}}{{- end -}}{{- end -}}
+{{- $k := 0 -}}
+{{- range $secs -}}
+  {{- $words := countwords (plainify .html) -}}{{- $min := math.Max 1 (math.Round (div (float $words) 213.0)) -}}
+  {{- if .intro -}}
+<section class="sec intro"><div class="sec-label" aria-hidden="true"></div><div class="prose">{{ .html | safeHTML }}</div></section>
+  {{- else -}}{{- $k = add $k 1 -}}
+<section class="sec" data-sec="{{ .id }}" aria-labelledby="{{ .id }}">
+  <div class="sec-label"><p class="n">{{ printf "%02d" $k }} of {{ printf "%02d" $total }}</p><p class="t"><a href="#{{ .id }}">{{ .title | safeHTML }}</a></p><p class="min">{{ int $min }} min</p></div>
+  <div class="prose">{{ .html | safeHTML }}</div>
+</section>
+  {{- end -}}
+{{- end -}}

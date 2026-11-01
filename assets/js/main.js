@@ -1,81 +1,161 @@
 (function () {
   "use strict";
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.documentElement.classList.add("js");
 
-  /* ---------- ordered-dither cloud textures ---------- */
-  var PALETTES = {
-    sky:  [[233,227,217],[214,214,226],[176,192,224],[143,168,216],[241,237,230]],
-    dusk: [[241,237,230],[243,196,206],[239,150,174],[214,214,226],[176,192,224]]
-  };
-  var BAYER = [0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
-
-  function hash(x, y, s) {
-    var h = (x * 374761393 + y * 668265263 + s * 2147483647) | 0;
-    h = (h ^ (h >>> 13)) * 1274126177;
-    return ((h ^ (h >>> 16)) >>> 0) / 4294967295;
-  }
-  function smooth(t) { return t * t * (3 - 2 * t); }
-  function noise(x, y, s) {
-    var xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
-    var a = hash(xi, yi, s), b = hash(xi + 1, yi, s), c = hash(xi, yi + 1, s), d = hash(xi + 1, yi + 1, s);
-    var u = smooth(xf), v = smooth(yf);
-    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
-  }
-  function fbm(x, y, s) {
-    var t = 0, amp = 0.5, f = 1;
-    for (var o = 0; o < 5; o++) { t += amp * noise(x * f, y * f, s + o); f *= 2; amp *= 0.5; }
-    return t;
+  /* ---------- tiny storage helpers (storage can be blocked: never break the page) ---------- */
+  function get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+  function set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function count(path, title) {
+    try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: path, title: title, event: true }); } catch (e) {}
   }
 
-  function paint(el) {
-    var pal = PALETTES[el.getAttribute("data-dither")] || PALETTES.sky;
-    var seed = (el.offsetTop % 97) + 7;
-    var px = window.innerWidth < 600 ? 2 : 3;
-    var w = Math.max(1, Math.ceil(el.clientWidth / px));
-    var h = Math.max(1, Math.ceil(el.clientHeight / px));
-    var cv = el.querySelector("canvas") || el.appendChild(document.createElement("canvas"));
-    cv.width = w; cv.height = h;
-    var ctx = cv.getContext("2d");
-    var img = ctx.createImageData(w, h), data = img.data;
-    var scale = 1 / 90 * px;
-    var levels = pal.length - 1;
-    for (var y = 0; y < h; y++) {
-      for (var x = 0; x < w; x++) {
-        var n = fbm(x * scale, y * scale * 1.6, seed);
-        var g = n * 1.25 - 0.18 + (y / h) * 0.25;
-        g = Math.min(0.999, Math.max(0, g));
-        var t = BAYER[(y & 3) * 4 + (x & 3)] / 16;
-        var lv = Math.min(levels, Math.floor(g * levels + t));
-        var c = pal[lv], i = (y * w + x) * 4;
-        data[i] = c[0]; data[i + 1] = c[1]; data[i + 2] = c[2]; data[i + 3] = 255;
+  var post = document.querySelector("article.post");
+
+  /* ---------- on a post: remember how far you got ---------- */
+  if (post) {
+    var path = post.getAttribute("data-path");
+    var title = post.getAttribute("data-title");
+    var minutes = +post.getAttribute("data-minutes") || 0;
+    var cover = document.querySelector(".post-head .cover img");
+    var key = "al:read:" + path;
+    var ticking = false;
+
+    function save() {
+      ticking = false;
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      if (h <= 0) return;
+      var p = Math.max(0, Math.min(1, window.scrollY / h));
+      var prev = get(key) || {};
+      set(key, { t: title, u: path, p: Math.max(p, prev.done ? 1 : 0), m: minutes, img: cover ? cover.getAttribute("src") : "", at: Date.now(), done: prev.done || p > 0.95 });
+    }
+    window.addEventListener("scroll", function () { if (!ticking) { ticking = true; setTimeout(save, 400); } }, { passive: true });
+
+    /* ---------- claims: mark as read when seen, count opens ---------- */
+    var claims = [].slice.call(document.querySelectorAll(".claim[data-claim]"));
+    if (claims.length) {
+      var ckey = "al:claims:" + path;
+      var seen = get(ckey) || [];
+      var counter = document.querySelector("[data-read-count]");
+      function paint() {
+        claims.forEach(function (c) { if (seen.indexOf(c.getAttribute("data-claim")) > -1) c.classList.add("is-read"); });
+        if (counter) counter.textContent = seen.length + " of " + claims.length + " read";
       }
+      paint();
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            var n = e.target.getAttribute("data-claim");
+            if (seen.indexOf(n) < 0) { seen.push(n); set(ckey, seen); paint(); }
+            io.unobserve(e.target);
+          });
+        }, { threshold: 0.75 });
+        claims.forEach(function (c) { io.observe(c.querySelector("h2")); c.querySelector("h2").setAttribute("data-claim", c.getAttribute("data-claim")); });
+      }
+      document.querySelectorAll("details[data-claim-ev]").forEach(function (d) {
+        d.addEventListener("toggle", function () { if (d.open) count(path + "#evidence-" + d.getAttribute("data-claim-ev"), "Evidence opened: " + title); });
+      });
+      /* phones: claims start folded to their headline; tap to open */
+      var phone = window.matchMedia("(max-width:820px)");
+      claims.forEach(function (c) {
+        var h = c.querySelector("h2");
+        var b = document.createElement("button");
+        b.type = "button";
+        b.setAttribute("aria-expanded", "false");
+        while (h.firstChild) b.appendChild(h.firstChild);
+        h.appendChild(b);
+        function sync() { b.tabIndex = phone.matches ? 0 : -1; }
+        sync();
+        if (phone.addEventListener) phone.addEventListener("change", sync);
+        b.addEventListener("click", function () {
+          if (!phone.matches) return;
+          var open = c.classList.toggle("is-open");
+          b.setAttribute("aria-expanded", open ? "true" : "false");
+          if (open) count(path + "#claim-" + c.getAttribute("data-claim"), "Claim opened: " + title);
+        });
+      });
+      var full = document.querySelector(".claims-end a");
+      if (full) full.addEventListener("click", function () { count(path + "#full", "Full analysis: " + title); });
     }
-    ctx.putImageData(img, 0, 0);
+
+    /* ---------- section labels: show which one you are in ---------- */
+    var secs = [].slice.call(document.querySelectorAll(".sec[data-sec]"));
+    if (secs.length && "IntersectionObserver" in window) {
+      var cur = null;
+      var so = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) {
+            if (cur) cur.classList.remove("is-here");
+            cur = e.target; cur.classList.add("is-here");
+          }
+        });
+      }, { rootMargin: "-40% 0px -55% 0px" });
+      secs.forEach(function (s) { so.observe(s); });
+    }
+
+    /* ---------- printing opens every piece of evidence ---------- */
+    window.addEventListener("beforeprint", function () { document.querySelectorAll("details").forEach(function (d) { d.open = true; }); });
   }
 
-  var dithers = [].slice.call(document.querySelectorAll("[data-dither]"));
-  function paintAll() { dithers.forEach(function (el) { try { paint(el); } catch (e) {} }); }
-  if (dithers.length) {
-    paintAll();
-    var lastW = window.innerWidth, timer;
-    window.addEventListener("resize", function () {
-      if (Math.abs(window.innerWidth - lastW) < 40) return;
-      lastW = window.innerWidth; clearTimeout(timer); timer = setTimeout(paintAll, 200);
-    });
+  /* ---------- home and lists: "Continue" row for a post you left halfway ---------- */
+  var cont = document.querySelector("[data-continue]");
+  if (cont) {
+    var best = null;
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k.indexOf("al:read:") !== 0) continue;
+        var r = get(k);
+        if (!r || r.done || r.p < 0.04 || r.p > 0.95) continue;
+        if (!document.querySelector('.row[data-path="' + r.u + '"]')) continue;
+        if (!best || r.at > best.at) best = r;
+      }
+    } catch (e) {}
+    if (best) {
+      cont.href = best.u;
+      cont.querySelector("[data-continue-t]").textContent = best.t;
+      cont.querySelector("[data-continue-d]").textContent = "Continue · " + Math.round(best.p * 100) + "% read";
+      var left = Math.max(1, Math.round(best.m * (1 - best.p)));
+      cont.querySelector("[data-continue-x]").textContent = left + " min left";
+      var im = cont.querySelector("[data-continue-img]");
+      var src = document.querySelector('.row[data-path="' + best.u + '"] .thumb');
+      if (src) { im.src = src.getAttribute("src"); im.hidden = false; }
+      cont.hidden = false;
+    }
   }
 
-  /* ---------- typewriter ---------- */
-  var el = document.querySelector(".type[data-words]");
-  if (el && !reduce) {
-    var words = el.getAttribute("data-words").split(","), wi = 0, ci = words[0].length, del = true;
-    el.setAttribute("aria-label", words.join(", "));
-    function tick() {
-      var w = words[wi];
-      if (del) { ci--; if (ci <= 0) { del = false; wi = (wi + 1) % words.length; } }
-      else { ci++; if (ci >= words[wi].length) { del = true; el.textContent = words[wi]; return setTimeout(tick, 2200); } }
-      el.textContent = words[wi].slice(0, Math.max(0, ci)) || "​";
-      setTimeout(tick, del ? 45 : 85);
+  /* ---------- enlarge a chart or figure ---------- */
+  var dlg = null;
+  function open(node, label) {
+    if (!dlg) {
+      dlg = document.createElement("dialog");
+      dlg.className = "zoom";
+      dlg.innerHTML = '<div class="bar"><span></span><button type="button" aria-label="Close">×</button></div><div class="body"></div>';
+      dlg.querySelector("button").addEventListener("click", function () { dlg.close(); });
+      dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
+      document.body.appendChild(dlg);
     }
-    setTimeout(tick, 2200);
+    dlg.querySelector(".bar span").textContent = label || "Figure";
+    var b = dlg.querySelector(".body");
+    b.innerHTML = "";
+    b.appendChild(node);
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
   }
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-enlarge]");
+    if (btn) {
+      var fig = btn.closest("figure");
+      var svg = fig && fig.querySelector("svg");
+      var lab = fig && fig.querySelector(".lab");
+      if (svg) open(svg.cloneNode(true), lab ? lab.textContent : "");
+      return;
+    }
+    var a = e.target.closest("[data-enlarge-img]");
+    if (a && window.matchMedia("(max-width:820px)").matches) {
+      e.preventDefault();
+      var img = new Image(); img.src = a.getAttribute("href"); img.alt = (a.querySelector("img") || {}).alt || "";
+      var f = a.closest("figure"); var l = f && f.querySelector(".lab");
+      open(img, l ? l.textContent : "");
+    }
+  });
 })();

@@ -1,18 +1,13 @@
 {{ define "main" }}
-<section class="list-hero">
-  <div class="dither list-dither" data-dither="sky" aria-hidden="true"></div>
-  <div class="wrap list-hero-inner">
-    <p class="eyebrow"><span class="sq pink" aria-hidden="true"></span>{{ if eq .RelPermalink "/blog/" }}ALL WRITING{{ else }}SECTION{{ end }}</p>
-    <h1 class="page-title">{{ if eq .RelPermalink "/blog/" }}The <em>blog</em>{{ else }}<em>{{ .Title }}</em>{{ end }}</h1>
-    {{ with .Description }}<p class="page-dek">{{ . }}</p>{{ else }}{{ with .Content }}<div class="page-dek">{{ . }}</div>{{ end }}{{ end }}
-    {{ if eq .RelPermalink "/blog/" }}
-    <ul class="band-tags left" aria-label="Sections">{{ range .Sections }}<li><a href="{{ .RelPermalink }}"><span class="sq" aria-hidden="true"></span>{{ upper .Title }}</a></li>{{ end }}</ul>
-    {{ end }}
-  </div>
+{{ $isBlog := eq .RelPermalink "/blog/" }}
+<section class="lede wrap">
+  <h1>{{ if $isBlog }}All writing{{ else }}{{ .Title }}{{ end }}</h1>
+  <div class="g3"><div class="intro col2">{{ with .Description }}<p>{{ . }}</p>{{ else }}{{ .Content }}{{ end }}</div></div>
 </section>
-<section class="wrap section">
-  <div class="grid">
-    {{ range .RegularPagesRecursive.ByDate.Reverse }}{{ partial "card.html" (dict "page" . "featured" false) }}{{ else }}<p class="empty">Nothing here yet.</p>{{ end }}
-  </div>
+<section class="wrap" aria-label="Posts">
+  <nav class="tabs" aria-label="Sections"><a href="/blog/"{{ if $isBlog }} aria-current="page"{{ end }}>All · {{ len (where site.RegularPages "Section" "blog") }}</a>{{ range where (site.GetPage "/blog").Sections "Kind" "section" }}<a href="{{ .RelPermalink }}"{{ if eq .RelPermalink $.RelPermalink }} aria-current="page"{{ end }}>{{ .Title }} · {{ len .RegularPagesRecursive }}</a>{{ end }}</nav>
+  <div class="idx-head g3"><span>Date</span><span>Writing</span><span class="c3">Length</span></div>
+  <a class="row g3 continue" href="#" data-continue hidden><span><img class="thumb" alt="" data-continue-img hidden><span class="d" data-continue-d>Continue</span></span><span><span class="t" data-continue-t></span></span><span class="x" data-continue-x></span></a>
+  {{ range .RegularPagesRecursive.ByDate.Reverse }}{{ partial "row.html" (dict "page" .) }}{{ else }}<p class="empty">Nothing here yet.</p>{{ end }}
 </section>
 {{ end }}
