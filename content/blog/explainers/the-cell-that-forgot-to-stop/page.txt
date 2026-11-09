@@ -1,0 +1,983 @@
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one textbook column (~680px) with margin notes on wide screens; figure "plates" break out to 1040px.
+   Palette borrowed from an H&E-stained microscope slide: hematoxylin purple nuclei, eosin pink cytoplasm. */
+:root{
+  --paper:#F6F5FB; --plate:#ECE9F6; --ink:#1C1936; --ink-soft:#57526F; --rule:#D6D1E8;
+  --hema:#4B2E9A; --hema-soft:#DCD3F5; --eosin:#C9336F; --eosin-soft:#F7D3E1;
+  --teal:#0F7A74; --teal-soft:#CBEAE6;
+  --vessel:#F0B3C6; --stroma:#F3E1EA; --cyto:#F2C1D4; --cyto-bad:#E7A0BF; --nuc:#6A4FB8; --nuc-dark:#2C1870;
+  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"Literata",Georgia,"Times New Roman",serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#15132A; --plate:#1E1B3A; --ink:#EEEBFA; --ink-soft:#ADA8CB; --rule:#38335E;
+    --hema:#B09AF6; --hema-soft:#2F2858; --eosin:#F27AA6; --eosin-soft:#4A2140;
+    --teal:#55C9BF; --teal-soft:#173D40;
+    --vessel:#6A2A47; --stroma:#2A1F3E; --cyto:#6B3556; --cyto-bad:#8C3A63; --nuc:#B9A4FA; --nuc-dark:#F0E8FF;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#15132A; --plate:#1E1B3A; --ink:#EEEBFA; --ink-soft:#ADA8CB; --rule:#38335E;
+  --hema:#B09AF6; --hema-soft:#2F2858; --eosin:#F27AA6; --eosin-soft:#4A2140;
+  --teal:#55C9BF; --teal-soft:#173D40;
+  --vessel:#6A2A47; --stroma:#2A1F3E; --cyto:#6B3556; --cyto-bad:#8C3A63; --nuc:#B9A4FA; --nuc-dark:#F0E8FF;
+  color-scheme:dark;
+}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:18px;line-height:1.68}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 64px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.08;margin:0}
+p{margin:0}
+a{color:var(--hema)}
+:focus-visible{outline:3px solid var(--eosin);outline-offset:3px;border-radius:4px}
+.prose{max-width:680px;display:grid;gap:1.05em}
+.pair{display:grid;grid-template-columns:minmax(0,680px) 240px;gap:48px;align-items:start}
+.pair > .prose{min-width:0}
+.note{font-size:15px;line-height:1.55;border-top:3px solid var(--hema);padding-top:12px;display:grid;gap:6px;color:var(--ink-soft)}
+.note b{font-family:var(--f-display);color:var(--ink);font-size:16px;font-weight:600}
+.note.warn{border-color:var(--eosin)}
+.note.calm{border-color:var(--teal)}
+@media (max-width:960px){
+  .pair{grid-template-columns:minmax(0,1fr);gap:22px}
+  .note{background:var(--plate);border-radius:12px;padding:14px 16px;border-top-width:3px;max-width:680px}
+}
+.mono{font-family:var(--f-mono)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+strong{font-weight:600}
+em.term{font-style:normal;font-weight:600;color:var(--hema);background:linear-gradient(transparent 62%,var(--hema-soft) 62%)}
+
+/* Hero */
+.hero{display:grid;gap:18px;padding-bottom:12px}
+.hero h1{font-size:clamp(44px,8vw,92px);font-weight:800;letter-spacing:-.025em;max-width:12ch}
+.hero h1 span{color:var(--eosin)}
+.hero .dek{font-size:clamp(19px,2.2vw,23px);max-width:34ch;color:var(--ink-soft)}
+.hero-strip{margin:8px 0 0}
+.hero-strip svg{display:block;width:100%;height:auto;color:var(--ink)}
+.opener{margin-top:36px}
+.opener p:first-child::first-letter{font-family:var(--f-display);font-weight:800;float:left;font-size:4.1em;line-height:.82;padding:6px 10px 0 0;color:var(--hema)}
+
+/* Contents */
+.toc{margin:44px 0 8px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding-block:18px}
+.toc ol{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 24px;counter-reset:ch}
+.toc li{counter-increment:ch;font-family:var(--f-display);font-size:16px}
+.toc li a{color:var(--ink);text-decoration:none;display:flex;gap:10px;align-items:baseline}
+.toc li a::before{content:counter(ch);font-family:var(--f-mono);font-size:12px;color:var(--eosin);min-width:1.4em}
+.toc li.rev a::before{content:"✓"}
+.toc li a:hover{color:var(--hema)}
+
+/* Chapters */
+.ch{padding-top:72px;display:grid;gap:28px;scroll-margin-top:12px}
+.ch-head{display:grid;gap:8px;max-width:760px}
+.ch-num{font-family:var(--f-mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--eosin)}
+.ch-head h2{font-size:clamp(32px,4.6vw,50px);font-weight:800;letter-spacing:-.02em}
+.rules{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:12px}
+.rules li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
+.rules .ic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--teal-soft);color:var(--teal);font-family:var(--f-display);font-weight:800;font-size:15px;margin-top:2px}
+
+/* Figure plates */
+.plate{margin:0;background:var(--plate);border-radius:16px;padding:22px clamp(14px,2.5vw,28px) 20px;display:grid;gap:14px}
+.fig-tag{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.fig-tag b{color:var(--eosin);font-weight:600}
+.fig-title{font-family:var(--f-display);font-size:21px;font-weight:600;line-height:1.2}
+.plate figcaption{font-size:15.5px;line-height:1.55;color:var(--ink-soft);max-width:760px}
+.plate > *, .lab > *, .ch > *{min-width:0}
+.halo{paint-order:stroke;stroke:var(--paper);stroke-width:5px;stroke-linejoin:round}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.plate svg{display:block;width:100%;height:auto;color:var(--ink)}
+.minw-600 svg{min-width:600px}
+.minw-540 svg{min-width:540px}
+
+/* SVG primitives */
+.t{font-family:var(--f-display);font-size:13px;fill:var(--ink)}
+.t.b{font-weight:600}
+.t.lg{font-size:16px;font-weight:600}
+.s{font-family:var(--f-display);font-size:11.5px;fill:var(--ink-soft)}
+.m{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;fill:var(--ink-soft);text-transform:uppercase}
+.cyto{fill:var(--cyto);stroke:var(--eosin);stroke-opacity:.35;stroke-width:1}
+.cyto.bad{fill:var(--cyto-bad);stroke-opacity:.55}
+.nuc{fill:var(--nuc)}
+.nuc.dark{fill:var(--nuc-dark)}
+.mem{stroke:var(--hema);stroke-width:3.5;stroke-linecap:round}
+.stroma{fill:var(--stroma)}
+.vessel{fill:var(--vessel);stroke:var(--eosin);stroke-opacity:.6;stroke-width:1.5}
+.sprout-o{fill:none;stroke:var(--eosin);stroke-opacity:.6;stroke-width:13;stroke-linecap:round}
+.sprout{fill:none;stroke:var(--vessel);stroke-width:9.5;stroke-linecap:round}
+.line{stroke:currentColor;stroke-width:1.6;fill:none}
+.line.soft{stroke:var(--ink-soft)}
+.line.bad{stroke:var(--eosin)}
+.dash{stroke-dasharray:4 4}
+.box{fill:var(--paper);stroke:var(--rule);stroke-width:1.5}
+.box.ok{stroke:var(--teal)}
+.box.bad{stroke:var(--eosin)}
+.badge{fill:var(--ink)}
+.badge-t{font-family:var(--f-mono);font-size:12px;font-weight:600;fill:var(--paper)}
+.seg{fill:none;stroke-width:34}
+.seg.g1{stroke:var(--teal-soft)} .seg.sp{stroke:var(--hema-soft)} .seg.g2{stroke:var(--teal-soft)} .seg.mm{stroke:var(--eosin-soft)}
+.gate{stroke:var(--ink);stroke-width:5;stroke-linecap:round}
+.immune{fill:var(--teal-soft);stroke:var(--teal);stroke-width:2}
+.ghost{fill:none;stroke:var(--ink-soft);stroke-dasharray:3 3;opacity:.7}
+.organ{fill:var(--hema-soft);stroke:var(--hema);stroke-opacity:.5;stroke-width:1.5}
+.tissue{fill:var(--stroma)}
+.capsule{fill:none;stroke:var(--ink-soft);stroke-width:2.5}
+.crab{fill:var(--cyto-bad);stroke:var(--eosin);stroke-width:2}
+.mk{fill:currentColor}
+.mk.bad{fill:var(--eosin)}
+.mk.ok{fill:var(--teal)}
+.field-ring{fill:none;stroke:var(--ink);stroke-width:7;opacity:.85}
+.field-bg{fill:var(--eosin-soft)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.pulse{animation:pulse 2.4s ease-in-out infinite}
+@keyframes drift{from{transform:translateX(-30px);opacity:0}15%{opacity:1}85%{opacity:1}to{transform:translateX(90px);opacity:0}}
+.drift{animation:drift 5s linear infinite;transform-box:fill-box}
+@media (prefers-reduced-motion:reduce){.pulse,.drift{animation:none}}
+
+/* Fig 3: control panel */
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px}
+.ctl{background:var(--paper);border-radius:12px;padding:16px;display:grid;gap:10px;align-content:start}
+.ctl-kind{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.ctl h3{font-size:22px;font-weight:800}
+.ctl-what{font-size:15px;line-height:1.5}
+.ctl-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ctl-pair > div{display:grid;gap:6px;align-content:start;min-width:0}
+.ctl-pair svg{background:var(--plate);border-radius:8px}
+.tag{font-family:var(--f-display);font-size:12.5px;line-height:1.35}
+.tag::before{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.tag.ok::before{content:"Healthy";color:var(--teal)}
+.tag.bad::before{content:"Mutated";color:var(--eosin)}
+.ctl-eg{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:8px}
+
+/* Fig 4: DNA typo */
+.typo{display:grid;gap:16px}
+.typo-row{display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px;align-items:center}
+.typo-row > span{font-family:var(--f-display);font-weight:600;font-size:15px}
+.codons{display:flex;gap:8px;flex-wrap:wrap}
+.codon{display:grid;gap:3px;justify-items:center;padding:6px 6px 5px;border-radius:8px;border:1.5px solid transparent}
+.codon.hit{border-color:var(--eosin);background:var(--paper)}
+.codon .n{font-family:var(--f-mono);font-size:10px;color:var(--ink-soft)}
+.bases{display:flex;gap:2px}
+.base{font-family:var(--f-mono);font-weight:600;font-size:17px;width:22px;height:26px;display:grid;place-items:center;border-radius:4px;background:var(--hema-soft);color:var(--hema)}
+.base.mut{background:var(--eosin);color:var(--paper)}
+.aa{font-family:var(--f-display);font-size:12.5px;color:var(--ink-soft)}
+.aa.mut{color:var(--eosin);font-weight:600}
+
+/* Fig 5: interactive */
+.lab{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:860px){.lab{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--paper);border-radius:12px;padding:18px;display:grid;gap:12px}
+.meter{display:flex;gap:6px;align-items:center}
+.meter i{width:18px;height:18px;border-radius:50%;border:2px solid var(--eosin);display:block}
+.meter i.on{background:var(--eosin)}
+.meter span{font-family:var(--f-mono);font-size:12px;color:var(--ink-soft);margin-left:6px}
+.panel h3{font-size:26px;font-weight:800}
+.panel .hit{font-family:var(--f-display);font-size:15px;font-weight:600;color:var(--eosin)}
+.panel .hit.none{color:var(--teal)}
+.panel p.body{font-size:16px;line-height:1.55}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+button{font-family:var(--f-display);font-size:15px;font-weight:600;border-radius:999px;padding:10px 16px;cursor:pointer;border:2px solid var(--ink);background:transparent;color:var(--ink)}
+button.primary{background:var(--eosin);border-color:var(--eosin);color:var(--paper)}
+button:disabled{opacity:.35;cursor:not-allowed}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pills button{font-size:12.5px;padding:5px 10px;border-width:1.5px;border-color:var(--rule);font-weight:400}
+.pills button[aria-pressed="true"]{border-color:var(--hema);background:var(--hema-soft);color:var(--hema);font-weight:600}
+
+/* Fig 6 */
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px 28px;max-width:1040px}
+.tip{border-top:2px solid var(--teal);padding-top:12px;display:grid;gap:6px;align-content:start}
+.tip h3{font-size:19px;font-weight:600}
+.tip p{font-size:15.5px;line-height:1.55;color:var(--ink-soft)}
+
+/* Review */
+.gloss{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px 36px;margin:0}
+.gloss div{display:grid;gap:2px;border-bottom:1px solid var(--rule);padding-bottom:12px}
+.gloss dt{font-family:var(--f-display);font-weight:600;font-size:17px;color:var(--hema)}
+.gloss dd{margin:0;font-size:15.5px;line-height:1.5}
+.quiz{display:grid;gap:10px;max-width:760px}
+.quiz details{background:var(--plate);border-radius:12px;padding:14px 18px}
+.quiz summary{font-family:var(--f-display);font-weight:600;font-size:17px;cursor:pointer;list-style-position:outside}
+.quiz details p{margin-top:10px;font-size:16px;line-height:1.55}
+.sub-h{font-family:var(--f-display);font-size:24px;font-weight:600;margin-top:12px}
+footer{margin-top:80px;border-top:1px solid var(--rule);padding-top:18px;font-size:14px;color:var(--ink-soft);max-width:760px;line-height:1.55}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <p class="eyebrow">An illustrated primer · Human biology</p>
+  <h1>The Cell That <span>Forgot to Stop</span></h1>
+  <p class="dek">What cancer is, how it begins inside the body, and why it spreads. A short textbook chapter, with pictures you can poke at.</p>
+  <figure class="hero-strip" style="margin:8px 0 0">
+    <svg id="hero-svg" viewBox="0 0 1000 196" role="img" aria-label="A neat row of healthy cells on the left. On the right, one abnormal cell and a growing mound of its abnormal descendants.">
+      <line class="mem" x1="0" y1="150" x2="1000" y2="150"/>
+      <g id="hero-cells"></g>
+      <line class="line soft dash" x1="586" y1="50" x2="586" y2="82"/>
+      <text class="t b" x="586" y="40" text-anchor="middle">the first rule-breaker</text>
+      <text class="m" x="20" y="182">healthy cells, following the rules</text>
+      <text class="m" x="980" y="182" text-anchor="end">one cell's descendants: a tumor</text>
+    </svg>
+  </figure>
+</header>
+
+<div class="pair opener">
+  <div class="prose">
+    <p>About 2,400 years ago the Greek physician Hippocrates looked at a hard tumor with swollen veins reaching out from it and thought of a crab, <i>karkinos</i>. The Latin word for crab is <i>cancer</i>. The name stuck, and so did the picture of something that grabs hold of the body and spreads.</p>
+    <p>The crab is a memorable image, but it hides the most important fact about the disease. <strong>Nothing crawls into you from outside.</strong> Cancer is made of your own cells, ones that have stopped following the rules every other cell obeys. This chapter explains what those rules are, how a cell comes to break them, and what happens next.</p>
+  </div>
+  <aside class="note">
+    <b>How to read this</b>
+    <p>Each chapter builds on the last. Figures marked <span class="mono" style="color:var(--eosin)">Try it</span> respond to clicks. Key words are <em class="term">highlighted</em> and collected in the review at the end.</p>
+  </aside>
+</div>
+
+<nav class="toc" aria-label="Chapters">
+  <p class="eyebrow">Contents</p>
+  <ol>
+    <li><a href="#city">A city of cells</a></li>
+    <li><a href="#rulebreaker">When a cell breaks the rules</a></li>
+    <li><a href="#manual">The instruction manual</a></li>
+    <li><a href="#origins">How does cancer start?</a></li>
+    <li><a href="#hits">One mistake is not enough</a></li>
+    <li><a href="#spread">Staying put, or spreading</a></li>
+    <li><a href="#odds">Tilting the odds</a></li>
+    <li class="rev"><a href="#review">Review</a></li>
+  </ol>
+</nav>
+
+<!-- ============ CHAPTER 1 ============ -->
+<section class="ch" id="city">
+  <div class="ch-head"><span class="ch-num">Chapter 1</span><h2>A city of 37 trillion cells</h2></div>
+  <div class="pair">
+    <div class="prose">
+      <p>Your body is built from roughly 30 to 37 trillion <em class="term">cells</em>. Picture them as citizens of a huge, well-run city. Skin cells are the walls, red blood cells are the delivery trucks, nerve cells run the phone lines. No cell works alone, and every one of them follows the same four rules:</p>
+      <ul class="rules">
+        <li><span class="ic">1</span><div><strong>Divide only when told.</strong> A cell copies itself only when its neighbours send a chemical "grow" signal, for example to heal a cut.</div></li>
+        <li><span class="ic">2</span><div><strong>Stop when told.</strong> When the job is done, "stop" signals switch division off again.</div></li>
+        <li><span class="ic">3</span><div><strong>Fix your mistakes.</strong> Every cell carries repair kits that check its DNA and correct errors.</div></li>
+        <li><span class="ic">4</span><div><strong>Die when it's time.</strong> Old or badly damaged cells self-destruct in a tidy, planned way called <em class="term">apoptosis</em>, and their parts are recycled.</div></li>
+      </ul>
+      <p>When a cell does divide, it runs through a fixed sequence called the <em class="term">cell cycle</em>: grow, copy the DNA, check the copy, split in two. Along the way are checkpoints where the cell stops and inspects itself, like quality inspectors on a factory line.</p>
+    </div>
+    <aside class="note calm">
+      <b>Constant renewal</b>
+      Your body replaces about 330 billion cells every day, mostly blood cells and the lining of the gut. That works out to nearly 4 million new cells every second. Every one of those divisions is a chance for something to go wrong.
+    </aside>
+  </div>
+
+  <figure class="plate">
+    <div class="fig-tag"><b>Fig 1</b> The cell cycle and its inspectors</div>
+    <div class="scroll minw-600">
+      <svg viewBox="0 0 760 362" role="img" aria-label="The cell cycle drawn as a ring: G1 grow, S copy DNA, G2 check, M divide. Checkpoint 1 sits between G1 and S, checkpoint 2 between G2 and M. Cells without a go signal rest in G0; cells with damage too big to repair self-destruct by apoptosis.">
+        <defs>
+          <marker id="ar1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker>
+          <marker id="ar1b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk bad" d="M0,0 L10,5 L0,10 z"/></marker>
+        </defs>
+        <g transform="rotate(-90 270 180)">
+          <circle class="seg g1" cx="270" cy="180" r="120" stroke-dasharray="297.6 456.4" stroke-dashoffset="0"/>
+          <circle class="seg sp" cx="270" cy="180" r="120" stroke-dasharray="222.2 531.8" stroke-dashoffset="-301.6"/>
+          <circle class="seg g2" cx="270" cy="180" r="120" stroke-dasharray="146.8 607.2" stroke-dashoffset="-527.8"/>
+          <circle class="seg mm" cx="270" cy="180" r="120" stroke-dasharray="71.4 682.6" stroke-dashoffset="-678.6"/>
+        </g>
+        <path class="line" d="M301.5,93.5 A92 92 0 0 1 356.5,148.5" marker-end="url(#ar1)"/>
+        <text class="m" x="270" y="176" text-anchor="middle">the cell cycle</text>
+        <text class="s" x="270" y="194" text-anchor="middle">one lap ≈ a day</text>
+
+        <text class="t" x="410" y="142" font-weight="600">G1</text>
+        <text class="t" x="410" y="159">grow &amp; work</text>
+        <text class="t" x="221" y="346" text-anchor="middle"><tspan font-weight="600">S</tspan> copy the DNA</text>
+        <text class="t" x="112" y="126" text-anchor="end" font-weight="600">G2</text>
+        <text class="t" x="112" y="143" text-anchor="end">check the copy</text>
+        <text class="t" x="236" y="22" text-anchor="middle"><tspan font-weight="600">M</tspan> divide in two</text>
+
+        <line class="gate" x1="327.6" y1="259.3" x2="353.5" y2="294.9"/>
+        <line class="gate" x1="212.4" y1="100.7" x2="186.5" y2="65.1"/>
+        <circle class="badge" cx="366" cy="311" r="11"/><text class="badge-t" x="366" y="315.5" text-anchor="middle">1</text>
+        <circle class="badge" cx="174" cy="52" r="11"/><text class="badge-t" x="174" y="56.5" text-anchor="middle">2</text>
+
+        <text class="t b" x="500" y="52" font-weight="600">Checkpoint 1 · before copying</text>
+        <text class="s" x="500" y="70">Is there a "go" signal? Is the DNA intact?</text>
+        <text class="t b" x="500" y="112" font-weight="600">Checkpoint 2 · before dividing</text>
+        <text class="s" x="500" y="130">Was every letter of DNA copied correctly?</text>
+
+        <line class="line" x1="405" y1="204" x2="490" y2="204" marker-end="url(#ar1)"/>
+        <text class="s" x="448" y="196" text-anchor="middle">no "go"</text>
+        <rect class="box ok" x="496" y="180" width="252" height="48" rx="10"/>
+        <text class="t" x="512" y="200" font-weight="600">G0 · resting</text>
+        <text class="s" x="512" y="218">most of your cells spend their lives here</text>
+
+        <line class="line bad" x1="379" y1="311" x2="490" y2="311" marker-end="url(#ar1b)"/>
+        <text class="s" x="434" y="303" text-anchor="middle">damage too big</text>
+        <rect class="box bad" x="496" y="287" width="252" height="48" rx="10"/>
+        <text class="t" x="512" y="307" font-weight="600">Apoptosis · self-destruct</text>
+        <text class="s" x="512" y="325">the cell dismantles itself safely</text>
+      </svg>
+    </div>
+    <figcaption>A cell that fails inspection either pauses to make repairs or self-destructs. Many cancers have broken one or both of these gates, so damaged cells keep going round the ring.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ CHAPTER 2 ============ -->
+<section class="ch" id="rulebreaker">
+  <div class="ch-head"><span class="ch-num">Chapter 2</span><h2>When a cell breaks the rules</h2></div>
+  <div class="pair">
+    <div class="prose">
+      <p><strong>Cancer is what happens when one cell stops obeying the four rules and passes that disobedience on to every cell it produces.</strong> It divides without being told, ignores stop signals, skips its repairs and refuses to die. Over years its descendants pile up into a lump called a <em class="term">tumor</em>. In the worst case they push into nearby tissue and travel to other organs.</p>
+      <p>This is why cancer is not one disease. Breast cancer, leukemia and skin cancer behave very differently because they start in different kinds of cells and break different rules in different ways. Doctors recognise more than a hundred types. What they share is the same basic story: a cell's own controls fail.</p>
+    </div>
+    <aside class="note">
+      <b>Cancer cells are "immortal"</b>
+      Normal cells can divide only around 50 times before they retire. Many cancer cells switch on an enzyme, telomerase, that resets this counter. A line of cervical cancer cells taken from Henrietta Lacks in 1951, called HeLa, is still dividing in labs today.
+    </aside>
+  </div>
+
+  <figure class="plate">
+    <div class="fig-tag"><b>Fig 2</b> What a pathologist sees</div>
+    <div class="scroll minw-540">
+      <svg id="scope-svg" viewBox="0 0 720 366" role="img" aria-label="Two circular microscope views. Left, normal tissue: cells of even size with small round nuclei in orderly rows. Right, cancer: crowded cells of mixed sizes with large, dark, irregular nuclei, some caught mid-division.">
+        <defs>
+          <clipPath id="clipA"><circle cx="180" cy="168" r="138"/></clipPath>
+          <clipPath id="clipB"><circle cx="540" cy="168" r="138"/></clipPath>
+        </defs>
+        <circle class="field-bg" cx="180" cy="168" r="138"/>
+        <circle class="field-bg" cx="540" cy="168" r="138"/>
+        <g id="scopeA" clip-path="url(#clipA)"></g>
+        <g id="scopeB" clip-path="url(#clipB)"></g>
+        <circle class="field-ring" cx="180" cy="168" r="141"/>
+        <circle class="field-ring" cx="540" cy="168" r="141"/>
+        <text class="t lg" x="180" y="334" text-anchor="middle">Normal tissue</text>
+        <text class="s" x="180" y="354" text-anchor="middle">even sizes · small round nuclei · orderly</text>
+        <text class="t lg" x="540" y="334" text-anchor="middle" style="fill:var(--eosin)">Cancer</text>
+        <text class="s" x="540" y="354" text-anchor="middle">crowded · mixed sizes · big dark nuclei</text>
+      </svg>
+    </div>
+    <figcaption>Cancer is diagnosed by eye, under a microscope. The standard stain is called H&amp;E: hematoxylin turns nuclei purple and eosin turns everything else pink, which is where this page gets its colours. Cancer nuclei look large and dark because they often hold extra or rearranged chromosomes. The flat purple bars on the right are cells caught in the act of dividing.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ CHAPTER 3 ============ -->
+<section class="ch" id="manual">
+  <div class="ch-head"><span class="ch-num">Chapter 3</span><h2>The instruction manual</h2></div>
+  <div class="pair">
+    <div class="prose">
+      <p>Every cell carries a full copy of your <em class="term">DNA</em>: a manual about 3 billion letters long, written in a four-letter alphabet (A, T, G and C). Short sections of it, called <em class="term">genes</em>, are recipes for proteins, and proteins do the cell's actual work. Some of those proteins are the rule-enforcers from Chapter 1.</p>
+      <p>Hundreds of genes have been linked to cancer, but they fall into three families. Think of the cell as a car:</p>
+    </div>
+    <aside class="note">
+      <b>Why brakes need two hits</b>
+      You carry two copies of most genes, one from each parent. A stuck accelerator causes trouble even if only one copy is mutated. A brake usually still works while one copy is fine, so both must break. Alfred Knudson worked this out in 1971 from a childhood eye cancer, retinoblastoma.
+    </aside>
+  </div>
+
+  <figure class="plate">
+    <div class="fig-tag"><b>Fig 3</b> The three control systems cancer breaks</div>
+    <div class="controls">
+      <article class="ctl">
+        <p class="ctl-kind">Oncogenes</p>
+        <h3>The accelerator</h3>
+        <p class="ctl-what">Genes that tell the cell to grow and divide. Healthy versions are called proto-oncogenes.</p>
+        <div class="ctl-pair">
+          <div>
+            <svg viewBox="0 0 220 110" role="img" aria-label="Speedometer with needle at a moderate setting">
+              <path d="M40,95 A70 70 0 0 1 180,95" fill="none" stroke="var(--ink-soft)" stroke-width="5" stroke-linecap="round"/>
+              <path d="M170.6,60 A70 70 0 0 1 180,95" fill="none" stroke="var(--eosin)" stroke-opacity=".35" stroke-width="5"/>
+              <line x1="110" y1="95" x2="76.7" y2="47.5" stroke="var(--teal)" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="110" cy="95" r="6" fill="var(--ink)"/>
+            </svg>
+            <span class="tag ok">Pressed only when a growth signal arrives</span>
+          </div>
+          <div>
+            <svg viewBox="0 0 220 110" role="img" aria-label="Speedometer with needle jammed in the red zone at maximum">
+              <path d="M40,95 A70 70 0 0 1 180,95" fill="none" stroke="var(--ink-soft)" stroke-width="5" stroke-linecap="round"/>
+              <path d="M170.6,60 A70 70 0 0 1 180,95" fill="none" stroke="var(--eosin)" stroke-width="9"/>
+              <line x1="110" y1="95" x2="167.4" y2="86.9" stroke="var(--eosin)" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="110" cy="95" r="6" fill="var(--ink)"/>
+            </svg>
+            <span class="tag bad">Jammed to the floor, even with no signal</span>
+          </div>
+        </div>
+        <p class="ctl-eg">Examples: RAS, MYC, HER2</p>
+      </article>
+
+      <article class="ctl">
+        <p class="ctl-kind">Tumor suppressor genes</p>
+        <h3>The brakes</h3>
+        <p class="ctl-what">Genes that halt division, run the checkpoints and trigger self-destruct.</p>
+        <div class="ctl-pair">
+          <div>
+            <svg viewBox="0 0 220 110" role="img" aria-label="A wheel with a brake pad pressed against it">
+              <circle cx="80" cy="55" r="40" fill="none" stroke="var(--ink)" stroke-width="3"/>
+              <g stroke="var(--ink)" stroke-width="2"><line x1="80" y1="18" x2="80" y2="92"/><line x1="43" y1="55" x2="117" y2="55"/><line x1="54" y1="29" x2="106" y2="81"/><line x1="54" y1="81" x2="106" y2="29"/></g>
+              <circle cx="80" cy="55" r="6" fill="var(--ink)"/>
+              <rect x="121" y="37" width="12" height="36" rx="3" fill="var(--teal)"/>
+              <line x1="133" y1="55" x2="206" y2="55" stroke="var(--ink-soft)" stroke-width="3"/>
+            </svg>
+            <span class="tag ok">Clamps on when something is wrong</span>
+          </div>
+          <div>
+            <svg viewBox="0 0 220 110" role="img" aria-label="A spinning wheel with the brake pad pulled away and its cable snapped">
+              <circle cx="80" cy="55" r="40" fill="none" stroke="var(--ink)" stroke-width="3"/>
+              <g stroke="var(--ink)" stroke-width="2"><line x1="80" y1="18" x2="80" y2="92"/><line x1="43" y1="55" x2="117" y2="55"/><line x1="54" y1="29" x2="106" y2="81"/><line x1="54" y1="81" x2="106" y2="29"/></g>
+              <circle cx="80" cy="55" r="6" fill="var(--ink)"/>
+              <path d="M38,22 A52 52 0 0 0 30,80" fill="none" stroke="var(--eosin)" stroke-width="2.5" stroke-dasharray="5 4"/>
+              <path d="M28,14 A62 62 0 0 0 20,90" fill="none" stroke="var(--eosin)" stroke-width="2" stroke-dasharray="3 5" opacity=".6"/>
+              <rect x="146" y="37" width="12" height="36" rx="3" fill="var(--eosin-soft)" stroke="var(--eosin)" stroke-width="1.5"/>
+              <polyline points="158,55 172,55 176,47 179,60" fill="none" stroke="var(--eosin)" stroke-width="3"/>
+              <polyline points="188,50 191,62 194,55 206,55" fill="none" stroke="var(--eosin)" stroke-width="3"/>
+            </svg>
+            <span class="tag bad">Cable cut, nothing slows the cell down</span>
+          </div>
+        </div>
+        <p class="ctl-eg">Examples: p53, RB, APC</p>
+      </article>
+
+      <article class="ctl">
+        <p class="ctl-kind">DNA repair genes</p>
+        <h3>The mechanics</h3>
+        <p class="ctl-what">Genes that proofread DNA and fix typos before they become permanent.</p>
+        <div class="ctl-pair">
+          <div>
+            <svg viewBox="0 0 220 110" role="img" aria-label="A DNA ladder with one rung freshly repaired">
+              <line x1="15" y1="30" x2="205" y2="30" stroke="var(--ink)" stroke-width="3"/>
+              <line x1="15" y1="80" x2="205" y2="80" stroke="var(--ink)" stroke-width="3"/>
+              <g stroke="var(--hema)" stroke-width="4"><line x1="25" y1="30" x2="25" y2="80"/><line x1="45" y1="30" x2="45" y2="80"/><line x1="65" y1="30" x2="65" y2="80"/><line x1="85" y1="30" x2="85" y2="80"/><line x1="105" y1="30" x2="105" y2="80"/><line x1="145" y1="30" x2="145" y2="80"/><line x1="165" y1="30" x2="165" y2="80"/><line x1="185" y1="30" x2="185" y2="80"/></g>
+              <line x1="125" y1="30" x2="125" y2="80" stroke="var(--teal)" stroke-width="7"/>
+              <path d="M114,16 l6,6 l12,-12" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="tag ok">Spots a wrong letter and fixes it</span>
+          </div>
+          <div>
+            <svg viewBox="0 0 220 110" role="img" aria-label="A DNA ladder with several broken, unrepaired rungs">
+              <line x1="15" y1="30" x2="205" y2="30" stroke="var(--ink)" stroke-width="3"/>
+              <line x1="15" y1="80" x2="205" y2="80" stroke="var(--ink)" stroke-width="3"/>
+              <g stroke="var(--hema)" stroke-width="4"><line x1="25" y1="30" x2="25" y2="80"/><line x1="45" y1="30" x2="45" y2="80"/><line x1="85" y1="30" x2="85" y2="80"/><line x1="105" y1="30" x2="105" y2="80"/><line x1="165" y1="30" x2="165" y2="80"/></g>
+              <g stroke="var(--eosin)" stroke-width="4"><line x1="65" y1="30" x2="65" y2="50"/><line x1="69" y1="60" x2="69" y2="80"/><line x1="125" y1="30" x2="125" y2="51"/><line x1="121" y1="59" x2="121" y2="80"/><line x1="145" y1="30" x2="145" y2="48"/><line x1="149" y1="62" x2="149" y2="80"/><line x1="185" y1="30" x2="185" y2="50"/><line x1="189" y1="60" x2="189" y2="80"/></g>
+            </svg>
+            <span class="tag bad">Nobody fixes anything, errors pile up</span>
+          </div>
+        </div>
+        <p class="ctl-eg">Examples: BRCA1, BRCA2, MLH1</p>
+      </article>
+    </div>
+    <figcaption>A healthy cell needs all three systems working. Cancer usually needs several of them to fail at once: a stuck accelerator alone is caught by the brakes, and broken brakes alone do little if nothing is pressing the accelerator.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ CHAPTER 4 ============ -->
+<section class="ch" id="origins">
+  <div class="ch-head"><span class="ch-num">Chapter 4</span><h2>How does cancer start?</h2></div>
+  <div class="pair">
+    <div class="prose">
+      <p>This is the question everyone asks, and the answer surprises most people: <strong>cancer does not get into the body. It is built inside it,</strong> out of your own cells, when the DNA manual gets changed.</p>
+      <p>A permanent change in DNA is called a <em class="term">mutation</em>. Most mutations are harmless: they land in unimportant stretches of DNA, or in a cell that is about to die anyway. Cancer starts only when mutations hit the wrong genes, the accelerators, brakes and mechanics, in the wrong combination, in a cell that keeps dividing.</p>
+      <p>A mutation can be astonishingly small. Here is a real piece of the KRAS gene, one of the accelerators.</p>
+    </div>
+    <aside class="note warn">
+      <b>Is cancer contagious?</b>
+      No. You cannot catch cancer by touching, hugging, sharing food or caring for someone who has it. Some viruses that raise cancer risk, like HPV and hepatitis B, do spread from person to person, which is exactly why vaccines against them prevent cancer.
+    </aside>
+  </div>
+
+  <figure class="plate">
+    <div class="fig-tag"><b>Fig 4</b> A one-letter typo</div>
+    <div class="typo" role="img" aria-label="KRAS codons 9 to 14. In the healthy gene codon 12 reads GGT, coding glycine. In the mutated gene it reads GAT, coding aspartic acid.">
+      <div class="typo-row">
+        <span style="color:var(--teal)">Healthy</span>
+        <div class="codons">
+          <div class="codon"><span class="n">9</span><div class="bases"><b class="base">G</b><b class="base">T</b><b class="base">T</b></div><span class="aa">Val</span></div>
+          <div class="codon"><span class="n">10</span><div class="bases"><b class="base">G</b><b class="base">G</b><b class="base">A</b></div><span class="aa">Gly</span></div>
+          <div class="codon"><span class="n">11</span><div class="bases"><b class="base">G</b><b class="base">C</b><b class="base">T</b></div><span class="aa">Ala</span></div>
+          <div class="codon"><span class="n">12</span><div class="bases"><b class="base">G</b><b class="base">G</b><b class="base">T</b></div><span class="aa">Gly</span></div>
+          <div class="codon"><span class="n">13</span><div class="bases"><b class="base">G</b><b class="base">G</b><b class="base">C</b></div><span class="aa">Gly</span></div>
+          <div class="codon"><span class="n">14</span><div class="bases"><b class="base">G</b><b class="base">T</b><b class="base">A</b></div><span class="aa">Val</span></div>
+        </div>
+      </div>
+      <div class="typo-row">
+        <span style="color:var(--eosin)">Mutated</span>
+        <div class="codons">
+          <div class="codon"><span class="n">9</span><div class="bases"><b class="base">G</b><b class="base">T</b><b class="base">T</b></div><span class="aa">Val</span></div>
+          <div class="codon"><span class="n">10</span><div class="bases"><b class="base">G</b><b class="base">G</b><b class="base">A</b></div><span class="aa">Gly</span></div>
+          <div class="codon"><span class="n">11</span><div class="bases"><b class="base">G</b><b class="base">C</b><b class="base">T</b></div><span class="aa">Ala</span></div>
+          <div class="codon hit"><span class="n">12</span><div class="bases"><b class="base">G</b><b class="base mut">A</b><b class="base">T</b></div><span class="aa mut">Asp</span></div>
+          <div class="codon"><span class="n">13</span><div class="bases"><b class="base">G</b><b class="base">G</b><b class="base">C</b></div><span class="aa">Gly</span></div>
+          <div class="codon"><span class="n">14</span><div class="bases"><b class="base">G</b><b class="base">T</b><b class="base">A</b></div><span class="aa">Val</span></div>
+        </div>
+      </div>
+    </div>
+    <figcaption>DNA is read three letters at a time; each triplet (a codon) picks one building block of the protein. At codon 12 of KRAS, a single G turned into an A, so the protein gets aspartic acid (Asp) instead of glycine (Gly). That one swap, out of 3 billion letters, jams the RAS accelerator in the ON position. This exact change, called KRAS G12D, is common in pancreatic and colon cancers.</figcaption>
+  </figure>
+
+  <div class="prose">
+    <p>So where do the typos come from? There are six main routes, and only some of them involve anything from outside.</p>
+  </div>
+
+  <figure class="plate">
+    <div class="fig-tag"><b>Fig 5</b> Six routes to a damaged gene</div>
+    <div class="scroll minw-600">
+      <svg viewBox="0 0 800 412" role="img" aria-label="A cell in the centre with its DNA. Arrows point in from five outside sources: inherited faulty genes, chemicals like tobacco smoke, radiation like UV, infections like HPV, and body conditions like obesity. A circular arrow inside the nucleus marks copying errors that happen during every division.">
+        <defs>
+          <marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker>
+          <marker id="ar2b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk bad" d="M0,0 L10,5 L0,10 z"/></marker>
+        </defs>
+        <circle class="cyto" cx="400" cy="240" r="110"/>
+        <circle cx="400" cy="240" r="58" fill="var(--hema-soft)" stroke="var(--nuc)" stroke-width="1.5"/>
+        <path d="M352,240 C362,220 372,220 382,240 S402,260 412,240 S432,220 442,240 L448,240" fill="none" stroke="var(--nuc)" stroke-width="3"/>
+        <path d="M352,240 C362,260 372,260 382,240 S402,220 412,240 S432,260 442,240 L448,240" fill="none" stroke="var(--nuc)" stroke-width="3"/>
+        <g stroke="var(--eosin)" stroke-width="3.5" stroke-linecap="round"><line x1="367" y1="226" x2="367" y2="254"/><line x1="397" y1="226" x2="397" y2="254"/><line x1="427" y1="226" x2="427" y2="254"/></g>
+        <path d="M467.7,264.6 A72 72 0 1 1 462.4,204" fill="none" stroke="var(--eosin)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ar2b)"/>
+        <text class="t" x="400" y="332" text-anchor="middle" font-weight="600" style="fill:var(--eosin)">copying errors</text>
+        <text class="s" x="400" y="376" text-anchor="middle">happen inside every dividing cell,</text>
+        <text class="s" x="400" y="392" text-anchor="middle">no outside cause needed</text>
+
+        <rect class="box" x="300" y="10" width="200" height="66" rx="10"/>
+        <text class="t" x="400" y="32" text-anchor="middle" font-weight="600">Inherited</text>
+        <text class="s" x="400" y="50" text-anchor="middle">a faulty gene from a parent</text>
+        <text class="s" x="400" y="66" text-anchor="middle">e.g. BRCA1/2 · 5–10% of cancers</text>
+        <line class="line" x1="400" y1="76" x2="400" y2="126" marker-end="url(#ar2)"/>
+        <text class="s" x="408" y="106">in every cell from birth</text>
+
+        <rect class="box" x="20" y="108" width="200" height="86" rx="10"/>
+        <text class="t" x="36" y="132" font-weight="600">Chemicals</text>
+        <text class="s" x="36" y="152">tobacco smoke (70+ carcinogens),</text>
+        <text class="s" x="36" y="168">chewing tobacco, alcohol,</text>
+        <text class="s" x="36" y="184">asbestos, benzene</text>
+        <line class="line" x1="222" y1="160" x2="303" y2="196" marker-end="url(#ar2)"/>
+
+        <rect class="box" x="20" y="300" width="200" height="70" rx="10"/>
+        <text class="t" x="36" y="324" font-weight="600">Radiation</text>
+        <text class="s" x="36" y="344">UV in sunlight, X-rays,</text>
+        <text class="s" x="36" y="360">radon gas</text>
+        <line class="line" x1="222" y1="330" x2="305" y2="292" marker-end="url(#ar2)"/>
+
+        <rect class="box" x="580" y="108" width="200" height="86" rx="10"/>
+        <text class="t" x="596" y="132" font-weight="600">Infections</text>
+        <text class="s" x="596" y="152">HPV, hepatitis B and C,</text>
+        <text class="s" x="596" y="168">H. pylori (stomach bacterium),</text>
+        <text class="s" x="596" y="184">Epstein-Barr virus</text>
+        <line class="line" x1="578" y1="160" x2="497" y2="196" marker-end="url(#ar2)"/>
+
+        <rect class="box" x="580" y="300" width="200" height="70" rx="10"/>
+        <text class="t" x="596" y="324" font-weight="600">Body conditions</text>
+        <text class="s" x="596" y="344">obesity, long-term inflammation,</text>
+        <text class="s" x="596" y="360">hormones that drive division</text>
+        <line class="line" x1="578" y1="330" x2="495" y2="292" marker-end="url(#ar2)"/>
+      </svg>
+    </div>
+    <figcaption>Every route ends in the same place: damaged DNA in one of your cells. Even when a virus is involved, the tumor is made of your cells, not the virus's.</figcaption>
+  </figure>
+
+  <div class="pair">
+    <div class="prose">
+      <p><strong>Copying errors deserve a closer look.</strong> Each time a cell divides it must copy about 6 billion letters (two sets of 3 billion). The copying machinery is astonishingly accurate, but not perfect, so a few new typos slip through with almost every division. A well-known 2017 study estimated that about two-thirds of the mutations found in cancers come from these random errors. That is one reason cancer can strike people who did everything right.</p>
+      <p>The outside routes still matter enormously, because they add extra typos on top of the unavoidable ones. The World Health Organization estimates that 30 to 50 percent of cancers could be prevented, mainly by avoiding tobacco and alcohol, getting vaccinated and keeping a healthy weight.</p>
+    </div>
+    <aside class="note">
+      <b>The two exceptions</b>
+      Cancer can, very rarely, pass through an organ transplant. And in Tasmania, wild Tasmanian devils spread a facial tumor to each other by biting. Neither happens in everyday human contact.
+    </aside>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 5 ============ -->
+<section class="ch" id="hits">
+  <div class="ch-head"><span class="ch-num">Chapter 5</span><h2>One mistake is not enough</h2></div>
+  <div class="pair">
+    <div class="prose">
+      <p>A single mutation almost never causes cancer. A cell usually needs several "hits" in different genes: an accelerator stuck, a brake or two broken, the mechanics gone, the self-destruct switch disabled. Each hit gives the cell a small advantage, so its descendants slowly outnumber their neighbours, and one of those descendants picks up the next hit.</p>
+      <p>This takes time. Going from the first hit to a dangerous cancer often takes 10 to 20 years or more. It is also why cancer is mainly a disease of later life: the longer you live, the more divisions your cells have made, and the more chances for hits to collect in one unlucky cell line.</p>
+    </div>
+    <aside class="note calm">
+      <b>Your bodyguards</b>
+      Most cells with dangerous mutations never become cancer. Repair genes fix the damage, the p53 protein orders self-destruct, and immune cells (T cells and natural killer cells) hunt down cells that look abnormal. A cancer is a cell that slipped past all three.
+    </aside>
+  </div>
+
+  <figure class="plate">
+    <div class="fig-tag"><b>Fig 6</b> Hit by hit <span style="color:var(--eosin)">· Try it</span></div>
+    <p class="fig-title">Add mutations one at a time and watch healthy tissue become cancer.</p>
+    <div class="lab">
+      <div class="scroll minw-540">
+        <svg id="lab-svg" viewBox="0 0 760 370" role="img" aria-label="Cross-section of tissue: a layer of cells on top of a basement membrane, with connective tissue and a blood vessel below. The picture changes as mutations are added.">
+          <defs>
+            <marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk bad" d="M0,0 L10,5 L0,10 z"/></marker>
+          </defs>
+          <rect class="stroma" x="0" y="200" width="760" height="170"/>
+          <rect class="vessel" x="-10" y="302" width="780" height="34"/>
+          <text class="m" x="14" y="20">inside of the organ (e.g. the colon)</text>
+          <text class="m" x="14" y="234">connective tissue</text>
+          <text class="m" x="14" y="323">blood vessel</text>
+          <g id="lab-dyn"></g>
+          <text class="m" x="746" y="218" text-anchor="end">basement membrane</text>
+        </svg>
+      </div>
+      <div class="panel" aria-live="polite">
+        <div class="meter" id="meter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><span id="meter-t">0 of 5 hits</span></div>
+        <h3 id="st-name">Healthy tissue</h3>
+        <p class="hit none" id="st-hit">No mutations yet</p>
+        <p class="body" id="st-body"></p>
+        <div class="btns">
+          <button id="btn-prev" type="button">← Undo</button>
+          <button id="btn-next" type="button" class="primary">Add a mutation →</button>
+        </div>
+        <div class="pills" id="pills" role="group" aria-label="Jump to stage"></div>
+      </div>
+    </div>
+    <figcaption>This is a simplified version of the path most colon cancers follow, first mapped by Eric Fearon and Bert Vogelstein in 1990. Real cancers vary in the order and number of hits, but the shape of the story is the same: slow, stepwise, and invisible for years.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ CHAPTER 6 ============ -->
+<section class="ch" id="spread">
+  <div class="ch-head"><span class="ch-num">Chapter 6</span><h2>Staying put, or spreading</h2></div>
+  <div class="prose">
+    <p>Not every lump is cancer. Doctors divide tumors into two kinds, and the difference is about behaviour, not size.</p>
+  </div>
+
+  <figure class="plate">
+    <div class="fig-tag"><b>Fig 7</b> Benign versus malignant</div>
+    <div class="scroll minw-540">
+      <svg id="bm-svg" viewBox="0 0 760 326" role="img" aria-label="Left: a benign tumor, a smooth round lump inside a capsule, pushing surrounding cells aside. Right: a malignant tumor, a ragged crab-like shape with no capsule, sending fingers into surrounding tissue, with one cell entering a blood vessel.">
+        <defs>
+          <marker id="ar4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker>
+        </defs>
+        <rect class="tissue" x="10" y="44" width="360" height="226" rx="14"/>
+        <rect class="tissue" x="390" y="44" width="360" height="226" rx="14"/>
+        <g id="bm-tissue"></g>
+        <circle cx="190" cy="158" r="88" fill="var(--plate)" opacity=".6"/>
+        <circle class="capsule" cx="190" cy="158" r="84"/>
+        <circle class="capsule" cx="190" cy="158" r="89" stroke-width="1" stroke-dasharray="3 3"/>
+        <g id="bm-benign"></g>
+        <rect class="vessel" x="390" y="246" width="360" height="22"/>
+        <path id="crab" class="crab" d="M520,110 C535,80 585,75 610,95 C640,85 660,100 655,120 L700,105 C705,112 700,118 690,122 L660,135 C670,160 665,185 640,195 L668,236 C664,243 656,241 652,236 L620,205 C595,215 560,212 540,200 L505,235 C498,236 495,230 498,224 L525,185 C505,165 505,140 515,125 L470,110 C466,104 470,98 478,99 Z"/>
+        <g id="bm-malig"></g>
+        <line class="line soft" x1="252" y1="96" x2="296" y2="70"/>
+        <text class="t halo" x="300" y="68">capsule</text>
+        <line class="line soft" x1="702" y1="104" x2="722" y2="80"/>
+        <text class="t halo" x="740" y="72" text-anchor="end">fingers invade</text>
+        <text class="t halo" x="420" y="72">no capsule</text>
+        <line class="line soft" x1="455" y1="77" x2="503" y2="112"/>
+        <text class="t" x="20" y="34" font-size="16" font-weight="600">Benign tumor</text>
+        <text class="t" x="400" y="34" font-size="16" font-weight="600" style="fill:var(--eosin)">Malignant tumor (cancer)</text>
+        <text class="s" x="20" y="294">Slow and smooth, walled off. Pushes neighbours aside.</text>
+        <text class="s" x="20" y="311">Does not spread. Usually cured by removing it.</text>
+        <text class="s" x="400" y="294">Fast and ragged, no wall. Grows into its neighbours.</text>
+        <text class="s" x="400" y="311">Can enter blood or lymph and spread to other organs.</text>
+      </svg>
+    </div>
+    <figcaption>The ragged outline on the right is the crab Hippocrates saw. "Malignant" means the tumor can invade; a benign tumor, like most moles and fibroids, cannot, though it can still cause trouble if it presses on something important.</figcaption>
+  </figure>
+
+  <div class="pair">
+    <div class="prose">
+      <p>The deadliest property of cancer is spread, called <em class="term">metastasis</em>. Most deaths from cancer are caused not by the first tumor but by the new colonies it seeds in vital organs like the lungs, liver and brain. To get there, a cancer cell has to complete a remarkable journey.</p>
+    </div>
+    <aside class="note">
+      <b>Why spread follows the plumbing</b>
+      Blood from the gut drains straight to the liver, so colon cancer usually spreads there first. Breast cancer favours bone, lungs, liver and brain. Where a cancer travels depends partly on where the blood goes.
+    </aside>
+  </div>
+
+  <figure class="plate">
+    <div class="fig-tag"><b>Fig 8</b> The five-step journey of metastasis</div>
+    <div class="scroll minw-600">
+      <svg id="meta-svg" viewBox="0 0 820 276" role="img" aria-label="A cancer cell leaves the primary tumor, enters a blood vessel, survives the ride while many others die, exits the vessel far away, and grows a new tumor in a distant organ.">
+        <defs>
+          <marker id="ar5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M0,0 L10,5 L0,10 z"/></marker>
+        </defs>
+        <rect class="tissue" x="6" y="40" width="168" height="108" rx="14"/>
+        <text class="m" x="90" y="30" text-anchor="middle">primary tumor</text>
+        <rect class="organ" x="660" y="24" width="154" height="108" rx="26"/>
+        <text class="m" x="737" y="16" text-anchor="middle">distant organ</text>
+        <rect class="vessel" x="130" y="150" width="590" height="40" rx="20"/>
+        <line class="line soft dash" x1="500" y1="182" x2="560" y2="182" marker-end="url(#ar5)"/>
+        <text class="s" x="496" y="186" text-anchor="end">blood flow</text>
+        <g id="meta-cells"></g>
+        <text class="s" x="404" y="140" text-anchor="middle">immune cell</text>
+        <line class="line soft" x1="404" y1="144" x2="404" y2="158"/>
+        <path class="line" d="M600,140 C610,110 630,95 668,86" marker-end="url(#ar5)"/>
+
+        <g text-anchor="middle">
+          <text class="t" x="88" y="226" font-weight="600">1 · Break out</text>
+          <text class="s" x="88" y="244">cuts through the</text>
+          <text class="s" x="88" y="259">basement membrane</text>
+          <text class="t" x="232" y="226" font-weight="600">2 · Slip in</text>
+          <text class="s" x="232" y="244">squeezes into a blood</text>
+          <text class="s" x="232" y="259">or lymph vessel</text>
+          <text class="t" x="402" y="226" font-weight="600">3 · Survive the ride</text>
+          <text class="s" x="402" y="244">most die, torn by the flow</text>
+          <text class="s" x="402" y="259">or caught by immune cells</text>
+          <text class="t" x="586" y="226" font-weight="600">4 · Climb out</text>
+          <text class="s" x="586" y="244">sticks to a far-off</text>
+          <text class="s" x="586" y="259">vessel wall, squeezes out</text>
+          <text class="t" x="744" y="226" font-weight="600">5 · Grow a colony</text>
+          <text class="s" x="744" y="244">a new tumor in lung,</text>
+          <text class="s" x="744" y="259">liver, bone or brain</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>Metastasis is very inefficient. A tumor can shed huge numbers of cells into the blood, and almost all of them die along the way. But it only takes a few survivors. This is why finding cancer before it reaches step 2 changes everything.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ CHAPTER 7 ============ -->
+<section class="ch" id="odds">
+  <div class="ch-head"><span class="ch-num">Chapter 7</span><h2>Tilting the odds</h2></div>
+  <div class="prose">
+    <p>Nobody can stop copying errors. But you can cut down the extra hits, and you can catch the early stages from Fig 6, when treatment works best.</p>
+  </div>
+  <div class="tips">
+    <div class="tip"><h3>No tobacco, in any form</h3><p>Smoking causes lung, throat, bladder and many other cancers. Chewing tobacco, gutka and khaini cause mouth cancer, one of the most common cancers among men in India.</p></div>
+    <div class="tip"><h3>Get the two cancer vaccines</h3><p>The HPV vaccine prevents most cervical cancers. The hepatitis B vaccine prevents a major cause of liver cancer.</p></div>
+    <div class="tip"><h3>Go easy on alcohol</h3><p>Alcohol is linked to at least seven cancers, including mouth, throat, liver, breast and bowel. Less is better; none is best.</p></div>
+    <div class="tip"><h3>Respect strong sun</h3><p>UV light damages skin DNA directly. Shade, clothing and sunscreen matter most in midday sun.</p></div>
+    <div class="tip"><h3>Move, and eat for your gut</h3><p>Regular activity, a healthy weight, plenty of fibre and less processed meat each lower the risk of several cancers.</p></div>
+    <div class="tip"><h3>Get screened on time</h3><p>Pap or HPV tests, mammograms, colonoscopy and oral check-ups find changes at the dysplasia or in-situ stage, often before they are cancer at all.</p></div>
+  </div>
+</section>
+
+<!-- ============ REVIEW ============ -->
+<section class="ch" id="review">
+  <div class="ch-head"><span class="ch-num">Review</span><h2>The chapter in one breath</h2></div>
+  <div class="prose">
+    <p>Your cells follow rules written in DNA. Typos in that DNA come from copying errors, inheritance and outside damage. When enough typos hit the accelerator, brake and repair genes of one cell, it divides without limit, its descendants form a tumor, and if they learn to invade and travel, that tumor becomes a cancer that can spread.</p>
+  </div>
+
+  <h3 class="sub-h">Key terms</h3>
+  <dl class="gloss">
+    <div><dt>Mutation</dt><dd>A permanent change in the DNA letters of a cell.</dd></div>
+    <div><dt>Oncogene</dt><dd>A mutated "accelerator" gene that is stuck on and drives constant division.</dd></div>
+    <div><dt>Tumor suppressor gene</dt><dd>A "brake" gene; cancer often needs both copies broken.</dd></div>
+    <div><dt>Apoptosis</dt><dd>Planned cell self-destruct. Cancer cells learn to dodge it.</dd></div>
+    <div><dt>Benign</dt><dd>A tumor that stays in place and does not invade or spread.</dd></div>
+    <div><dt>Malignant</dt><dd>A tumor that invades neighbouring tissue and can spread. This is cancer.</dd></div>
+    <div><dt>Carcinoma in situ</dt><dd>Abnormal cells that have not yet crossed the basement membrane.</dd></div>
+    <div><dt>Metastasis</dt><dd>Spread of cancer cells through blood or lymph to start new tumors elsewhere.</dd></div>
+  </dl>
+
+  <h3 class="sub-h">Check yourself</h3>
+  <div class="quiz">
+    <details><summary>A friend has cancer. Can you catch it from them?</summary><p>No. Cancer is made of the patient's own cells and cannot take hold in another person's body through everyday contact. Some cancer-causing viruses can spread, but the cancer itself does not.</p></details>
+    <details><summary>Why does cancer become more common with age?</summary><p>Cancer needs several hits to build up in one cell line. Each division adds a small chance of a new typo, so the longer you live, the more chances there are for the full set of hits to collect.</p></details>
+    <details><summary>Oncogene versus tumor suppressor, in one line each?</summary><p>An oncogene is an accelerator stuck in the ON position. A tumor suppressor is a brake that has been cut. Most cancers have both.</p></details>
+    <details><summary>A tumor has abnormal cells that have not crossed the basement membrane. What stage is it?</summary><p>Carcinoma in situ (stage 3 in Fig 6). It cannot spread yet, which is why removing it at this stage usually cures it.</p></details>
+  </div>
+
+  <footer>
+    This is a simplified educational primer, written to build intuition. It is not medical advice. If you notice a lump, a sore that will not heal, unexplained bleeding or weight loss, see a doctor.
+  </footer>
+</section>
+
+</div>
+
+<script>
+(function(){
+  const NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent){ const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+  function rng(seed){ let s = seed >>> 0; return () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; }; }
+  function smooth(pts){
+    const n = pts.length; const f = v => v.toFixed(1);
+    let d = 'M' + f(pts[0][0]) + ',' + f(pts[0][1]);
+    for (let i = 0; i < n; i++){
+      const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+      d += 'C' + f(p1[0] + (p2[0] - p0[0]) / 6) + ',' + f(p1[1] + (p2[1] - p0[1]) / 6) + ' ' + f(p2[0] - (p3[0] - p1[0]) / 6) + ',' + f(p2[1] - (p3[1] - p1[1]) / 6) + ' ' + f(p2[0]) + ',' + f(p2[1]);
+    }
+    return d + 'Z';
+  }
+  function blob(cx, cy, rx, ry, irr, r, n){
+    n = n || 9; const pts = []; const off = r() * Math.PI * 2;
+    for (let i = 0; i < n; i++){ const a = off + i / n * Math.PI * 2; const k = 1 + (r() - 0.5) * irr; pts.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]); }
+    return smooth(pts);
+  }
+  // A cell: pink cytoplasm + purple nucleus. abn 0..1 controls how abnormal it looks.
+  function cell(g, cx, cy, rx, ry, abn, r, opts){
+    opts = opts || {};
+    const grp = el('g', opts.cls ? {class: opts.cls} : {}, g);
+    const bad = abn > 0.3;
+    el('path', {d: blob(cx, cy, rx, ry, 0.12 + abn * 0.35, r), class: bad ? 'cyto bad' : 'cyto'}, grp);
+    const base = Math.min(rx, ry);
+    if (opts.mitosis){
+      el('path', {d: blob(cx, cy, base * 0.85, base * 0.28, 0.5, r, 10), class: 'nuc dark'}, grp);
+      return grp;
+    }
+    const nr = base * (0.36 + abn * (0.22 + r() * 0.22));
+    el('path', {d: blob(cx + (r() - .5) * abn * rx * 0.35, cy + (r() - .5) * abn * ry * 0.35, nr, nr * (0.88 + r() * 0.24), 0.08 + abn * 0.5, r, 8), class: bad ? 'nuc dark' : 'nuc'}, grp);
+    return grp;
+  }
+
+  /* ---------- Hero strip ---------- */
+  (function(){
+    const g = document.getElementById('hero-cells'); const r = rng(7);
+    for (let i = 0; i < 12; i++) cell(g, 30 + i * 46, 118, 20, 29, 0, r);
+    const rogue = cell(g, 586, 118, 21, 29, 0.9, r); rogue.setAttribute('class', 'pulse');
+    for (let x = 636; x <= 975; x += 27){
+      const h = Math.round(3.2 * Math.exp(-Math.pow((x - 810) / 95, 2)));
+      for (let k = 0; k <= h; k++){
+        const sz = 13 + r() * 5;
+        cell(g, x + (r() - .5) * 6, 132 - k * 27 - (k ? 0 : 0) + (r() - .5) * 4, sz, sz * (0.9 + r() * 0.3), 0.7 + r() * 0.3, r, {mitosis: r() < 0.06});
+      }
+    }
+  })();
+
+  /* ---------- Microscope fields ---------- */
+  (function(){
+    const A = document.getElementById('scopeA'), B = document.getElementById('scopeB');
+    let r = rng(11);
+    for (let j = -6; j <= 6; j++){
+      const y = 168 + j * 25; const off = (j & 1) ? 15 : 0;
+      for (let x = 32 + off; x <= 330; x += 30) cell(A, x + (r() - .5) * 2, y, 14, 12, 0.02, r);
+    }
+    r = rng(23);
+    const pts = [];
+    for (let i = 0; i < 150; i++) pts.push([400 + r() * 280, 28 + r() * 280, 9 + r() * 12]);
+    pts.sort((a, b) => b[2] - a[2]);
+    pts.forEach(p => cell(B, p[0], p[1], p[2], p[2] * (0.8 + r() * 0.4), 0.65 + r() * 0.35, r, {mitosis: r() < 0.05}));
+  })();
+
+  /* ---------- Benign vs malignant ---------- */
+  (function(){
+    const T = document.getElementById('bm-tissue'), Bn = document.getElementById('bm-benign'), M = document.getElementById('bm-malig');
+    const crab = document.getElementById('crab');
+    const inCrab = (x, y) => { try { return crab.isPointInFill(new DOMPoint(x, y)); } catch(e){ return Math.hypot(x - 585, y - 155) < 75; } };
+    let r = rng(5);
+    for (let y = 60, row = 0; y <= 258; y += 24, row++){
+      for (let x = 24 + (row & 1 ? 13 : 0); x <= 360; x += 27){
+        if (Math.hypot(x - 190, y - 158) < 100) continue;
+        cell(T, x, y, 11, 10, 0, r);
+      }
+      for (let x = 404 + (row & 1 ? 13 : 0); x <= 740; x += 27){
+        if (y > 234) continue;
+        let near = false;
+        for (const [dx, dy] of [[0,0],[13,0],[-13,0],[0,12],[0,-12],[9,9],[-9,-9],[9,-9],[-9,9]]) if (inCrab(x + dx, y + dy)) { near = true; break; }
+        if (near) continue;
+        cell(T, x, y, 11, 10, 0, r);
+      }
+    }
+    r = rng(9);
+    for (let y = 84; y <= 236; y += 20) for (let x = 114; x <= 266; x += 21){
+      if (Math.hypot(x - 190, y - 158) > 72) continue;
+      cell(Bn, x + (r() - .5) * 3, y + (r() - .5) * 3, 10, 9, 0.12, r);
+    }
+    r = rng(31);
+    for (let y = 80; y <= 245; y += 13) for (let x = 465; x <= 710; x += 14){
+      const px = x + (r() - .5) * 6, py = y + (r() - .5) * 6;
+      if (!inCrab(px, py)) continue;
+      const s = 6 + r() * 4;
+      cell(M, px, py, s, s * (0.85 + r() * .3), 0.8 + r() * .2, r, {mitosis: r() < 0.05});
+    }
+    cell(M, 690, 258, 9, 7, 0.9, r);
+  })();
+
+  /* ---------- Metastasis journey ---------- */
+  (function(){
+    const g = document.getElementById('meta-cells'); const r = rng(17);
+    for (let i = 0; i < 26; i++){
+      const a = r() * Math.PI * 2, d = Math.sqrt(r());
+      cell(g, 92 + Math.cos(a) * 50 * d, 92 + Math.sin(a) * 36 * d, 9 + r() * 4, 9 + r() * 4, 0.8 + r() * 0.2, r);
+    }
+    cell(g, 120, 140, 9, 7, 0.9, r);                 // breaking out
+    cell(g, 232, 152, 12, 8, 0.9, r);                // squeezing in
+    cell(g, 344, 170, 10, 10, 0.9, r);               // riding
+    el('circle', {class: 'immune', cx: 404, cy: 170, r: 12}, g);
+    el('circle', {cx: 404, cy: 170, r: 4.5, fill: 'var(--teal)'}, g);
+    el('circle', {class: 'ghost', cx: 428, cy: 171, r: 9}, g);
+    cell(g, 462, 168, 10, 10, 0.9, r);
+    cell(g, 594, 150, 11, 8, 0.9, r);                // climbing out
+    for (let i = 0; i < 16; i++){
+      const a = r() * Math.PI * 2, d = Math.sqrt(r());
+      cell(g, 742 + Math.cos(a) * 40 * d, 80 + Math.sin(a) * 28 * d, 8 + r() * 3, 8 + r() * 3, 0.8 + r() * 0.2, r);
+    }
+  })();
+
+  /* ---------- Interactive: hit by hit ---------- */
+  const STAGES = [
+    {name: 'Healthy tissue', hit: 'No mutations yet', body: 'A single tidy layer of cells sits on the basement membrane, a thin sheet that separates it from the blood vessels below. Cells divide only to replace the ones that wear out.'},
+    {name: 'Hyperplasia', hit: 'Hit 1 · an accelerator gets stuck ON (e.g. a RAS gene)', body: 'One cell and its descendants divide a bit more than they should. They still look normal, there are just too many of them. Often harmless, and it can reverse.'},
+    {name: 'Dysplasia', hit: 'Hit 2 · a brake fails (e.g. APC)', body: 'Cells start to look wrong: uneven sizes, bigger and darker nuclei, a messy arrangement. Screening tests like Pap smears and colonoscopies are designed to catch this stage.'},
+    {name: 'Carcinoma in situ', hit: 'Hit 3 · the guard p53 is lost, self-destruct disabled', body: 'The whole layer is now abnormal, but every cell is still above the basement membrane. "In situ" means "in its original place". Removed now, it is usually cured.'},
+    {name: 'Invasive cancer', hit: 'Hit 4 · learns to break barriers and grow blood vessels', body: 'Cells dissolve the basement membrane and push into the tissue below. The tumor releases signals that make new blood vessels grow toward it, bringing food and oxygen. This is cancer in the full sense.'},
+    {name: 'Metastasis', hit: 'Hit 5 · survives the journey', body: 'Some cells slip into the blood or lymph and travel. A few survive and start new tumors in other organs. Most cancer deaths are caused by this spread, not by the first tumor.'}
+  ];
+  const dyn = document.getElementById('lab-dyn');
+  const Z0 = 230, Z1 = 530, CX = 380;
+  function drawStage(s){
+    dyn.replaceChildren();
+    const r = rng(42 + s * 3);
+    const abnZ = [0, 0.05, 0.45, 0.85, 0.9, 0.95][s];
+    if (s < 4) el('line', {class: 'mem', x1: 0, y1: 200, x2: 760, y2: 200}, dyn);
+    else { el('line', {class: 'mem', x1: 0, y1: 200, x2: 332, y2: 200}, dyn); el('line', {class: 'mem', x1: 438, y1: 200, x2: 760, y2: 200}, dyn); }
+    if (s >= 4){
+      const d = 'M560,304 C560,268 520,250 452,236';
+      el('path', {class: 'sprout-o', d}, dyn); el('path', {class: 'sprout', d}, dyn);
+      el('text', {class: 's', x: 574, y: 258}, dyn).textContent = 'new vessel grows';
+      el('text', {class: 's', x: 574, y: 273}, dyn).textContent = 'toward the tumor';
+    }
+    // base row
+    for (let i = 0; i < 14; i++){
+      const x = 28 + i * 54; const inZ = x > Z0 && x < Z1;
+      if (inZ && s >= 3) continue;
+      cell(dyn, x, 166, 22, 30, inZ ? abnZ : 0, r);
+    }
+    if (s === 1){
+      for (let x = 262; x <= 500; x += 48) cell(dyn, x, 120, 21, 18, 0.05, r);
+    }
+    if (s === 2){
+      for (let x = 250; x <= 512; x += 44) cell(dyn, x + (r() - .5) * 6, 122, 18 + r() * 4, 17 + r() * 3, 0.4 + r() * 0.2, r);
+      for (let x = 290; x <= 470; x += 42) cell(dyn, x + (r() - .5) * 6, 86, 16 + r() * 4, 15 + r() * 3, 0.4 + r() * 0.2, r);
+    }
+    if (s >= 3){
+      const rows = s >= 4 ? [180, 150, 120, 90, 62, 36] : [180, 150, 120, 90, 62];
+      rows.forEach((y, k) => {
+        const half = 155 - k * (s >= 4 ? 20 : 24);
+        for (let x = CX - half; x <= CX + half; x += 26 + r() * 6){
+          const sz = 11 + r() * 8;
+          cell(dyn, x + (r() - .5) * 6, Math.min(y + (r() - .5) * 6, 186), sz, sz * (0.85 + r() * 0.3), 0.75 + r() * 0.25, r, {mitosis: r() < 0.06});
+        }
+      });
+    }
+    if (s >= 4){
+      for (let i = 0; i < 12; i++){
+        const a = r() * Math.PI * 2, d = Math.sqrt(r());
+        const sz = 9 + r() * 6;
+        cell(dyn, 385 + Math.cos(a) * 60 * d, 236 + Math.sin(a) * 26 * d, sz, sz * 0.9, 0.85 + r() * 0.15, r);
+      }
+    }
+    if (s >= 5){
+      cell(dyn, 398, 276, 10, 9, 0.9, r);
+      cell(dyn, 404, 296, 10, 8, 0.9, r);
+      [440, 560, 670].forEach((x, i) => {
+        const c = cell(dyn, x, 319, 10, 9, 0.9, r, {cls: 'drift'});
+        c.style.animationDelay = (i * -1.6) + 's';
+      });
+      el('text', {class: 't', x: 746, y: 358, 'text-anchor': 'end', style: 'fill:var(--eosin)', 'font-weight': 600}, dyn).textContent = 'to lungs, liver, bone, brain →';
+    }
+  }
+  const btnPrev = document.getElementById('btn-prev'), btnNext = document.getElementById('btn-next');
+  const pills = document.getElementById('pills');
+  const meterDots = document.querySelectorAll('#meter i');
+  let stage = 0;
+  STAGES.forEach((st, i) => {
+    const b = document.createElement('button'); b.type = 'button'; b.id = 'pill-' + i; b.textContent = st.name;
+    b.addEventListener('click', () => set(i)); pills.appendChild(b);
+  });
+  function set(s){
+    stage = Math.max(0, Math.min(STAGES.length - 1, s));
+    const st = STAGES[stage];
+    document.getElementById('st-name').textContent = st.name;
+    const hit = document.getElementById('st-hit'); hit.textContent = st.hit; hit.classList.toggle('none', stage === 0);
+    document.getElementById('st-body').textContent = st.body;
+    meterDots.forEach((d, i) => d.classList.toggle('on', i < stage));
+    document.getElementById('meter-t').textContent = stage + ' of 5 hits';
+    btnPrev.disabled = stage === 0; btnNext.disabled = stage === STAGES.length - 1;
+    btnNext.textContent = stage === STAGES.length - 1 ? 'Fully malignant' : 'Add a mutation →';
+    pills.querySelectorAll('button').forEach((b, i) => b.setAttribute('aria-pressed', String(i === stage)));
+    drawStage(stage);
+  }
+  btnPrev.addEventListener('click', () => set(stage - 1));
+  btnNext.addEventListener('click', () => set(stage + 1));
+  set(0);
+})();
+</script>
+

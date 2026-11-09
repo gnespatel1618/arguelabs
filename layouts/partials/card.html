@@ -7,7 +7,7 @@
     <div class="card-body">
       <h3 class="card-title">{{ partial "title.html" $p.Title }}</h3>
       {{ with $p.Description }}<p class="card-desc">{{ . }}</p>{{ end }}
-      <span class="card-meta">{{ $p.ReadingTime }} MIN READ <span class="arrow" aria-hidden="true">→</span></span>
+      <span class="card-meta">{{ $p.Params.minutes | default $p.ReadingTime }} MIN READ <span class="arrow" aria-hidden="true">→</span></span>
     </div>
   </a>
 </article>

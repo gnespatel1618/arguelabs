@@ -1,0 +1,59 @@
+{{- /* Standalone page: renders a self-contained HTML page (its own design, CSS and JS)
+       kept in the bundle as front matter page_html, inside a thin arguelabs strip.
+       Used for the illustrated explainers. Series links come from front matter series/part. */ -}}
+<!doctype html>
+<html lang="{{ site.LanguageCode }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{{ .Title }} · {{ site.Title }}</title>
+{{- $desc := .Description | default site.Params.description }}
+<meta name="description" content="{{ $desc }}">
+<meta name="author" content="{{ site.Params.author }}">
+<link rel="canonical" href="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ .Title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:type" content="article">
+{{- $cover := "" }}{{ with .Params.cover }}{{ with $.Resources.GetMatch . }}{{ $cover = .Permalink }}{{ end }}{{ end }}
+{{ with $cover }}<meta property="og:image" content="{{ . }}"><meta name="twitter:image" content="{{ . }}">{{ end }}
+<meta name="twitter:card" content="{{ if $cover }}summary_large_image{{ else }}summary{{ end }}">
+<meta name="twitter:site" content="@{{ site.Params.x }}"><meta name="twitter:creator" content="@{{ site.Params.x }}">
+{{ with site.GetPage "/blog" }}{{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">{{ end }}{{ end }}
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23141414'/%3E%3Ctext x='6' y='24' font-family='Helvetica,Arial,sans-serif' font-weight='800' font-size='22' fill='%23fcfcfa'%3Ea%3C/text%3E%3Crect x='22' y='19' width='5' height='5' fill='%23ef5f86'/%3E%3C/svg%3E">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<style>
+.al-strip,.al-foot{font-family:var(--f-display,system-ui,sans-serif);color:var(--ink,#1C1936);background:var(--paper,#F6F5FB)}
+.al-strip{border-bottom:1px solid var(--rule,#D6D1E8)}
+.al-in{max-width:1040px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));display:flex;gap:6px 18px;align-items:baseline;flex-wrap:wrap;font-size:14px;line-height:1.4}
+.al-in a{color:inherit;text-decoration:none}
+.al-in a:hover{color:var(--eosin,#C9336F)}
+.al-brand{font-weight:800;font-size:17px;letter-spacing:-.01em}
+.al-brand i{font-style:normal;color:#ef5f86}
+.al-sec{color:var(--ink-soft,#57526F)}
+.al-parts{display:flex;gap:6px 14px;flex-wrap:wrap;margin-left:auto}
+.al-parts a{color:var(--ink-soft,#57526F)}
+.al-parts a[aria-current="page"]{color:var(--eosin,#C9336F);font-weight:600}
+.al-foot{border-top:1px solid var(--rule,#D6D1E8)}
+.al-foot .al-in{display:grid;gap:8px;padding-top:18px;padding-bottom:28px;color:var(--ink-soft,#57526F)}
+.al-foot p{margin:0}
+</style>
+</head>
+<body>
+{{- $parts := slice }}{{ with .Params.series }}{{ range where (where site.RegularPages "Section" "blog") "Params.series" . }}{{ $parts = $parts | append . }}{{ end }}{{ end }}
+{{- $parts = sort $parts "Params.part" }}
+<div class="al-strip" role="banner"><div class="al-in">
+<a class="al-brand" href="/">arguelabs<i>.</i></a>
+{{ with .Parent }}<a class="al-sec" href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}
+{{ if gt (len $parts) 1 }}<nav class="al-parts" aria-label="{{ .Params.series }} series">{{ range $parts }}<a href="{{ .RelPermalink }}"{{ if eq .RelPermalink $.RelPermalink }} aria-current="page"{{ end }}>{{ .Params.part }} · {{ .Params.short | default .Title }}</a>{{ end }}</nav>{{ end }}
+</div></div>
+{{ (.Resources.Get .Params.page_html).Content | safeHTML }}
+<div class="al-foot" role="contentinfo"><div class="al-in">
+{{ if gt (len $parts) 1 }}<p>The {{ .Params.series }} series: {{ range $i, $p := $parts }}{{ if $i }} · {{ end }}<a href="{{ $p.RelPermalink }}">Part {{ $p.Params.part }}, {{ $p.Title }}</a>{{ end }}</p>{{ end }}
+<p>By <a href="https://x.com/{{ site.Params.x }}">{{ site.Params.author }}</a> · {{ .Date.Format "2 Jan 2006" }} · <a href="/">arguelabs.in</a> · <a href="/blog/index.xml">RSS</a></p>
+<p>Educational only, not medical advice.</p>
+</div></div>
+{{ partial "analytics.html" . }}
+</body>
+</html>
