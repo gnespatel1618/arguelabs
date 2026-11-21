@@ -1,6 +1,7 @@
 ---
 title: "Kaynes Technology: India's electronics bet, explained"
 date: 2026-10-21T10:00:00+05:30
+lastmod: 2026-11-21T12:00:00+05:30
 description: "The profits are real, but the cash isn't showing up. The chip and PCB plants meant to fix that start earning only from late 2026."
 cover: "kaynes-cover.jpg"
 ---
@@ -10,6 +11,39 @@ In January 2025, Kaynes was the market's favourite way to own India's chip dream
 **The short answer:** the profits are real, but the cash isn't showing up. Since FY19 Kaynes has reported ₹1,006 Cr of profit and −₹550 Cr of operating cash flow. Most of the gap sits in one business, smart meters. The chip and PCB plants that are meant to fix the story start earning only from late 2026.
 
 {{< chart src="k01-at-a-glance.svg" label="At a glance" source="Screener.in, Kaynes results and calls · as of 20 Oct 2026" >}}
+
+## Update, 21 Nov 2026: the Q2 FY27 results
+
+> **Updated 21 Nov 2026.** Kaynes reported its September-quarter results in mid-November. This section checks them against the list in "What to track". The rest of the post is the original analysis from 21 Oct.
+
+The quarter was weaker than our cautious view. Revenue barely grew, and the costs of the new plants arrived before their revenue.
+
+|  | Q2 FY26 | Q2 FY27 | Change |
+| --- | --- | --- | --- |
+| Revenue | ₹912 Cr | ₹953 Cr | +4.4% |
+| EBITDA | ₹150 Cr | ₹126 Cr | −16% |
+| EBITDA margin | 16.4% | 13.2% | −3.2 pts |
+| Depreciation | ₹20 Cr | ₹35 Cr | +74% |
+| Finance cost | ₹13 Cr | ₹39 Cr | about 3x |
+| Net profit | ₹116 Cr | ₹40 Cr | −66% |
+
+Sources: [HDFC Sky, 16 Nov 2026](https://hdfcsky.com/news/kaynes-technology-q2-profit-plunges-65-6-percent-to-rs-39-8-crore-shares-fall-around-14-percent); [Screener.in](https://www.screener.in/company/KAYNES/consolidated/) (consolidated).
+
+**Against our checklist**
+
+- **Smart meters:** revenue from smart metering fell about 80% from a year ago, according to reports of management's commentary. This is the business our cash-flow concern centres on.
+- **Margins:** down 3.2 points to 13.2%, against 16.4% a year ago.
+- **Funding:** debt-to-equity doubled to 0.4x from 0.2x, and working-capital days rose to 169 from 123 in Q1. The cash gap we described is now showing up in the profit and loss account as interest.
+- **Order book:** ₹10,625 Cr, up about 31%, comfortably above the ₹8,904 Cr we flagged. Demand is not the problem.
+- **Plant timelines:** we have not yet confirmed from the call transcript what management said about Sanand and the Chennai PCB plant. We will add it once we have read it.
+
+**The market's verdict.** The stock fell as much as 14% on 16 November and closed at ₹2,910 on 20 November. That is 10% below the ₹3,250 this post used, and still above our fair value of ₹1,900–2,350. Brokers turned cautious: CLSA rates it Hold with a ₹3,580 target, JPMorgan Neutral with ₹3,150. On trailing earnings the stock trades at about 74 times.
+
+**What it means.** The quarter supports the view in this post: the profits were real, but they were being paid for with cash that the business did not generate, and that bill is now arriving as interest. Our fair value is unchanged. Our FY28 EPS estimate of ₹57, well below the street's ₹88, looks more reasonable after this quarter, not less.
+
+**Next checks:** first revenue from the OSAT plant in Q3 FY27; smart-meter collections and receivables; and whether the H2 cash flow improves as promised.
+
+---
 
 ## The industry in two minutes
 

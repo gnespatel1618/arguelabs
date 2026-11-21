@@ -1,8 +1,34 @@
 ---
 title: "Indian medical devices: what India makes, and what's priced in"
 date: 2026-10-25T07:30:00+05:30
+lastmod: 2026-11-21T12:00:00+05:30
 description: "India makes the disposables, assembles the middle and imports the top. The margins sit with makers and hospitals, and the one scaled listed pure-play, Poly Medicure, is priced for its best case."
 cover: "medtech-cover.jpg"
+---
+
+## Update, 21 Nov 2026: the Q2 FY27 results
+
+> **Updated 21 Nov 2026.** Poly Medicure and SMT have reported their September-quarter results. This section checks them against "What to watch". The rest of the post is the original analysis from 24 Oct.
+
+**Poly Medicure**
+
+|  | Q2 FY26 | Q2 FY27 | Change |
+| --- | --- | --- | --- |
+| Consolidated revenue | ₹444 Cr | ₹581 Cr | +31% (organic growth for the half year: 14%) |
+| Standalone revenue | | ₹488 Cr | +17% |
+| Consolidated operating EBITDA | | ₹139 Cr | +20%, a margin of about 24% |
+| Consolidated net profit | ₹92 Cr | ₹95 Cr | +3% |
+
+Sources: [Screener.in](https://www.screener.in/company/POLYMED/consolidated/); Q2 FY27 earnings call via [InvestyWise](https://www.investywise.com/poly-medicure-limited-q2-h1-fy27-earnings-call-transcript/).
+
+- **Guidance:** FY27 consolidated revenue of ₹2,300–2,400 Cr and a 23–25% EBITDA margin, both unchanged. The standalone margin guide rose to 26–27.5%, from 25–27%.
+- **Against our watch-list:** Q2 revenue of ₹581 Cr sits just below the ₹592 Cr a quarter needed from Q2 to Q4 to reach the ₹2,300 Cr floor. The margin held at about 24%, well above our 22% warning level. Standalone growth of 17% is close to the 17.1% a year our base case assumes.
+- **Price:** ₹1,636 on 20 November, up 13% since this post and about 21% above our fair-value midpoint of ₹1,351. The trailing P/E is about 52. We are not changing the fair value on one quarter in line with our base case; the gap to price has simply widened.
+
+**A correction on the dialyser duty.** This post said a decision was expected around year-end. The anti-dumping investigation into dialyser imports from China and Malaysia only began on 19 June 2026 ([Skrine](https://www.skrine.com/insights/alerts/june-2026/india-commences-anti-dumping-duties-investigation)). India's rules give the investigating authority a year from initiation for its final findings, extendable by six months, so a decision is more likely around mid-2027.
+
+**SMT** listed on 23 October at ₹371 against a ₹344 issue price and traded around ₹528 on 20 November, about 53% above the issue price and at about 75 times trailing earnings. Its first results as a listed company were strong: revenue of ₹373 Cr (+25%), EBITDA of ₹66 Cr at a record 17.6% margin, and net profit of ₹26 Cr (+27%) ([Screener.in](https://www.screener.in/company/SMT/consolidated/)).
+
 ---
 
 ## The 60-second view
@@ -267,7 +293,7 @@ The mid case is Rs 1,351 a share, 6% below the price. A low case (consumables 20
 | Margin | EBITDA margin holds at 23% to 25% while Citieffe and PendraCare are integrated | Q1 FY27 net profit fell 8.6% on 30% sales growth; watch the margin against 24% |
 | Multiple | About 27x FY27E EBITDA (32x trailing on operating profit) against 13.7x globally and 14x to 24x for Indian peers | A growth slip tests the multiple first: five turns of exit P/E is worth about Rs 185 a share |
 | Policy and trade | Little visible discount, in my read, for trade-margin caps, the undecided US Section 232 probe or the PLI scheme ending in FY27 | The DoP outcome on where a cap applies; a Section 232 determination |
-| Renal and dumping | Management's 15% to 18% renal growth for FY27 | Renal fell 3.8% in Q1 on Chinese pricing; an anti-dumping duty decision is expected around year-end |
+| Renal and dumping | Management's 15% to 18% renal growth for FY27 | Renal fell 3.8% in Q1 on Chinese pricing; an anti-dumping duty decision is more likely around mid-2027 (corrected 21 Nov) |
 | Pipeline | Small: the sum of the parts gives cardiology about Rs 57 a share | PACIFER DES registry (840 of 2,000 enrolled) and the orthopaedic ramp-up |
 
 For the price to earn 12% a year, several things must hold together: revenue near my base-case Rs 3,528 cr by FY30, EBITDA margin at 24% or better, an exit multiple still near 40x P/E, channel rules that stop short of ex-factory prices, and renal pricing that stabilises. Miss any one and nothing in the price absorbs it. At my base-case EPS growth and a 30x exit, the price that earns 12% is Rs 1,112, about 23% below today. This is analysis of what the price implies, not a recommendation to buy or sell; I am not a licensed adviser.
@@ -281,7 +307,7 @@ The thesis breaks on price rules and on Poly's execution before it breaks on dem
 | Where a trade-margin cap applies | A cap set at ex-factory prices rather than at the first point of sale | It would move the squeeze from the channel to the makers (sector thesis) |
 | Poly revenue, FY27 | Below Rs 2,300 cr (Q2 to Q4 must average about Rs 592 cr a quarter against Rs 525 cr in Q1) | The price needs growth well above Vision 2030's 19% a year |
 | Poly EBITDA margin | Below 22% for two consecutive quarters (guidance 23% to 25%; Q1 FY27 consolidated 24.1%) | Reverse DCF needs a far higher margin, so any slip widens the gap |
-| Renal growth | Still negative after an anti-dumping duty decision (due around year-end) | Shows whether Chinese pricing is cyclical or structural |
+| Renal growth | Still negative after an anti-dumping duty decision (likely around mid-2027) | Shows whether Chinese pricing is cyclical or structural |
 | Exit multiple | Poly trades below about 30x trailing P/E on a flat EPS path | At 30x the 12%-return entry price is Rs 1,112, about 23% below today |
 | Domestic share of local demand | Stalls near 30% for two years | The import-substitution runway is the sector case |
 | Local content | Flat near 30% while imports keep rising | Assembly without component depth caps margins |

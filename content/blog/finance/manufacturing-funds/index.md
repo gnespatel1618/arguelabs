@@ -1,6 +1,7 @@
 ---
 title: "India's manufacturing funds: which ones earned their fee"
 date: 2026-11-06T08:00:00+05:30
+lastmod: 2026-11-21T12:00:00+05:30
 description: "The manufacturing theme beat the Nifty 500 by 6.7 points a year over three years. Late buyers still earned almost nothing, and only 2 of 12 active funds beat the theme itself. All calculated from daily NAVs."
 cover: "manufacturing-funds-cover.jpg"
 hide_sections: ["bottom-line"]
@@ -47,6 +48,20 @@ claims:
     evidence: ["n14-scorecard.svg", "n15-scenarios.svg"]
     sources: ["My scorecard and scenarios; weights and rules in the text"]
     section: "scorecard-and-scenarios"
+---
+
+## Update, 21 Nov 2026: one buying trigger has been met
+
+> **Updated 21 Nov 2026.** A short note on the entry rules in "How I would use this theme". The fund analysis is unchanged.
+
+This post set three conditions for speeding up instalments: Brent below $95, the index P/E below about 23, or Q3 results showing margins holding.
+
+- **Brent: met.** Brent settled at $91.98 on 20 November, down from above $117 when this was written ([QNA](https://qna.org.qa/en/News-Area/News/2026-11/20/oil-prices-end-largely-unchanged-as-brent-edges-higher-and-us-crude-slips)).
+- **P/E: not met.** The Nifty India Manufacturing index trades at about 26.4 times earnings, up from 25.6 as the index rallied ([IIFL](https://www.indiainfoline.com/markets/indices/nifty-india-manufacturing)).
+- **Q3 margins:** not due until January–February 2027.
+
+By the rule in this post, the oil condition alone is enough to move instalments faster. The other risk named here, a rupee past 100, has also eased. The India–EU trade deal is still expected to be signed in mid-December.
+
 ---
 
 ## Bottom line

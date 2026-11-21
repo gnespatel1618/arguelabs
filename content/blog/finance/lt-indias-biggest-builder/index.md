@@ -3,7 +3,7 @@ title: "L&T: India's biggest builder, explained"
 date: 2026-10-19T18:00:00+05:30
 description: "L&T is very good at winning work and much less good at turning it into rising margins. And the stock already prices in a smooth future."
 cover: "lt-cover.jpg"
-lastmod: 2026-10-29T09:00:00+05:30
+lastmod: 2026-11-21T12:00:00+05:30
 ---
 
 Imagine a company that has already been hired to build ₹7.8 lakh crore of projects. That is more work than its next six Indian rivals have combined. It builds metros, refineries, offshore platforms, power lines, nuclear parts and submarines. Yet its stock has returned only about 6% a year for three years.
@@ -11,6 +11,18 @@ Imagine a company that has already been hired to build ₹7.8 lakh crore of proj
 **The short answer:** L&T is very good at winning work. It is much less good at turning that work into rising profit margins. And the stock already prices in a smooth future.
 
 {{< chart src="01-at-a-glance.svg" label="At a glance" source="Screener.in, L&T results releases · as of 19 Oct 2026" >}}
+
+## Update, 21 Nov 2026: the price has reached our base case
+
+> **Updated 21 Nov 2026.** A short note on price. The Q2 results update below (29 Oct) and the original analysis are unchanged.
+
+L&T closed at ₹4,209 on 20 November, up 15% from the ₹3,653 this post used and close to our FY28 base case of ₹4,238 (EPS ₹163 at 26 times). At a trailing P/E of about 31, the market is now paying for the base case about eighteen months early.
+
+The business has not changed in that time. Orders keep beating expectations, while the projects and manufacturing margin was 7.0% in Q2 against the 7.8% management targets for the year. Our view stays the same: a great franchise, and the price now assumes the margin recovery we have not yet seen. The H2 margin is the number to watch.
+
+Source: [Screener.in](https://www.screener.in/company/LT/consolidated/), 20 Nov 2026 close.
+
+---
 
 ## Update, 29 Oct 2026: the Q2 FY27 results
 

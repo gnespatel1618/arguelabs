@@ -1,6 +1,7 @@
 ---
 title: "Building assets isn't building value: what India's capex boom earns on each new rupee"
 date: 2026-10-18T23:17:00+05:30
+lastmod: 2026-11-21T12:00:00+05:30
 description: "28 of 46 asset-heavy Indian companies earned more than their cost of capital on the money they added. The fastest builders mostly didn't."
 cover: "capex-cover.jpg"
 ---
@@ -10,6 +11,25 @@ Over the last three years, Divi's Labs and JSW Energy both built at speed. Divi'
 Same boom. Very different outcomes for shareholders.
 
 India is in an asset-building cycle: hospital beds, hotel rooms, drug reactors, gigawatts of solar. The question that decides who creates value is simple: **what does each new rupee of assets earn?**
+
+## Update, 21 Nov 2026: what Q2 FY27 showed
+
+> **Updated 21 Nov 2026.** This section checks "What I'm watching in Q2 FY27" against the September-quarter results. The rest of the post is the original analysis from 18 Oct. All figures are consolidated, from [Screener.in](https://www.screener.in/), with prices as of 20 November.
+
+| Company | Revenue | Operating margin | Net profit | What it says about the new rupee |
+| --- | --- | --- | --- | --- |
+| Divi's | +35% | 33% → 43% | +64% | Capital under construction fell to ₹1,638 Cr from ₹2,113 Cr, and margins rose rather than fell as it came into use |
+| Apollo | +23% | 15% → 16% | +34% | New capacity is not diluting returns |
+| KIMS | +40% | 21% → 19% | +4% | New hospitals still dilute: profit flat on 40% more revenue, now about 164x earnings |
+| Indian Hotels | +22% | 28% → 28% | +19% | Pricing held; management raised its full-year revenue growth guidance to 15–17% |
+| JSW Energy | +23% | 58% → 57% | +38% | Profit recovered from Q1, but borrowings rose again, to ₹82,547 Cr in September from ₹76,946 Cr in March |
+| NTPC Green | +53% | 86% → 88% | +60% | Still at about 107x earnings, with borrowings up to ₹37,742 Cr |
+
+**What it means.** The quarter fits the argument. The builders that fund growth from their own cash (Divi's, Apollo, Indian Hotels) turned new capacity into higher profits. The ones that build ahead of demand, or on borrowed money, still show the lag: KIMS's new beds cost more than they earn so far, and JSW Energy's better quarter came with more debt. The solar developers this post described at 96–125x earnings are NTPC Green, now about 107x, and Adani Green, about 121x.
+
+**Disclosure:** I hold shares of Divi's Labs.
+
+---
 
 ## The argument in five lines
 

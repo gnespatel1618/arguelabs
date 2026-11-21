@@ -1,6 +1,7 @@
 ---
 title: "Smart money in the fall: what FIIs sold and Indian funds bought"
 date: 2026-10-26T08:00:00+05:30
+lastmod: 2026-11-21T12:00:00+05:30
 description: "Foreigners pulled a record ₹3.08 lakh crore out of Indian stocks in 2026. Indian funds took the shares. Who bought what, which results backed it, and where the signals agree."
 cover: "smart-money-cover.jpg"
 hide_sections: ["the-answer-in-one-minute"]
@@ -54,6 +55,53 @@ claims:
     evidence: ["n14-conviction.svg"]
     sources: ["Our four-signal check; prices and P/E from Screener.in, 26 Oct 2026"]
     section: "the-conviction-list-where-the-signals-agree"
+---
+
+## Update, 21 Nov 2026: the flows reversed
+
+> **Updated 21 Nov 2026.** One correction, and what has happened since. The rest of the post is the original analysis from 26 Oct.
+
+**Correction.** The ₹48,056 crore October outflow in this post covered trading only to 23 October. Foreign investors bought about ₹6,300 crore in the last week of the month, so the full-month outflow was **₹34,843 crore**. The 2026 total at the end of October was about ₹2.95 lakh crore by that count; sources quote ₹2.95–3.12 lakh crore. ([Free Press Journal, CDSL data](https://www.freepressjournal.in/business/fpis-withdraw-34843-crore-from-indian-equities-in-october-turn-net-buyers-in-final-week))
+
+**November turned the handover around.** FPIs put a record ₹84,291 crore into Indian equities in the first half of November. More than half went into the sector they had been selling hardest:
+
+| Sector | FPI net flow, 1–15 Nov (₹ crore) |
+| --- | --- |
+| Financial services | +43,102 |
+| Telecom | +7,570 |
+| Auto | +7,551 |
+| Consumer services | +6,519 |
+| IT | +5,080 |
+| FMCG | +3,042 |
+| Capital goods | −3,781 |
+
+Source: NSDL data via [Business Standard](https://www.business-standard.com/markets/news/fpis-pour-record-84k-cr-in-1st-half-of-nov-financials-auto-rake-in-most-126111901252_1.html).
+
+Indian institutions are now on the other side. On provisional exchange data, they were net sellers on almost every day in November.
+
+**What mutual funds did in October** (Prime Database, via [5paisa](https://www.5paisa.com/blog/itc-mutual-funds-biggest-october-stock-purchase-icici-bank-leads-sales)):
+
+- **Bought:** ITC ₹7,873 crore, Jio Platforms ₹7,711 crore, Zetwerk ₹2,561 crore, HDFC Bank ₹2,506 crore, Persistent ₹2,455 crore.
+- **Sold:** ICICI Bank ₹3,278 crore, Kotak ₹1,961 crore, Infosys ₹1,888 crore, LIC ₹1,840 crore, HCL Tech ₹1,418 crore.
+
+Three of our conviction names (HCL Tech, ICICI Bank and Kotak) were among the biggest October sales.
+
+**The conviction list, four weeks on** (Screener.in prices; Kotak is an intraday price on 20 Nov):
+
+| Stock | Score | 26 Oct | 20 Nov | Change |
+| --- | --- | --- | --- | --- |
+| HCL Tech | 4/4 | ₹1,422 | ₹1,344 | −5% |
+| ICICI Bank | 3/4 | ₹1,394 | ₹1,640 | +18% |
+| Kotak Bank | 3/4 | ₹430 | ₹513 | +19% |
+| Bajaj Finance | 3/4 | ₹929 | ₹1,122 | +21% |
+| ITC | 2/4 | ₹258 | ₹299 | +16% |
+| M&M | 2/4 | ₹2,861 | ₹3,545 | +24% |
+| HDFC Bank | 2/4 (watch list) | ₹693 | ₹846 | +22% |
+
+ITC reported a weaker quarter after this post (consolidated profit down 18%, as the cigarette tax hit volumes), and still rose 16%. M&M's consolidated profit rose 30%.
+
+**What it means.** The financials that FPIs sold in September and October, and that Indian funds absorbed, rallied the most once FPIs came back. The one name with the highest score, HCL Tech, is the only one that fell, as funds sold IT again. Four weeks is far too short to judge a four-signal list, but the lesson is a familiar one: flows can turn faster than fundamentals. None of these is a buy call.
+
 ---
 
 ## The answer in one minute

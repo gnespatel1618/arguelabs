@@ -1,6 +1,7 @@
 ---
 title: "India's new market leaders: what the price already assumes"
 date: 2026-11-07T08:00:00+05:30
+lastmod: 2026-11-21T12:00:00+05:30
 description: "Eight companies listed since Oct 2024 are #1 in their category, worth ₹23.4 lakh crore together. The market asks Lenskart for about 35% a year of profit growth and Waaree for about 8%. A value-chain and valuation look at all eight."
 cover: "new-market-leaders-cover.jpg"
 claims:
@@ -350,9 +351,11 @@ Three of the eight leaders (NSE, Groww, SBI Funds) are one bet on Indian retail 
 
 **Supply overhang from lock-in expiries** (approximate, counted from listing; anchor lock-ins are 30 and 90 days, pre-IPO holders 6 months):
 
-- Jio Platforms: anchors around 27 Nov 2026 and 26 Jan 2027; pre-IPO holders around 28 Apr 2027.
+- Jio Platforms: half of the anchor shares (about 3.6 crore) unlock on 25 Nov 2026 and the rest around 25 Jan 2027, counted from the 26 Oct allotment; pre-IPO holders around 26 Apr 2027.
 - NSE: anchors fully free around 23 Dec 2026; pre-IPO holders around 24 Mar 2027.
-- SBI Funds: pre-IPO holders around 21 Jan 2027, with the stock already below its issue price.
+- SBI Funds: about 142.8 crore shares become free to trade on 18 Jan 2027, with the stock still below its ₹574 issue price.
+
+*Corrected 21 Nov 2026: the Jio and SBI Funds dates now follow the allotment-based dates reported by [IPO Guru](https://www.ipoguru.in/news/jio-platforms-anchor-lock-in-ends-25-november) and [Angel One](https://www.angelone.in/news/market-updates/jio-platforms-shiprocket-and-sbi-funds-lead-list-of-116-companies-with-35-billion-share-unlocks).*
 
 {{< chart src="n13-lockins.svg" label="Figure 13" source="Approximate, counted from listing dates (IPO Central)" >}}
 
